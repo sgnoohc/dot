@@ -10,7 +10,7 @@ function jarvis() {
 }
 
 function setdisplay() {
-  echo $DISPLAY > ~/login/.display
+  echo $DISPLAY > ~/dot/.display
 }
 
 setdisplay
