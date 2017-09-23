@@ -9,43 +9,13 @@ Host uaf-*
   ForwardX11   yes
   ForwardX11Trusted  yes
 
-#HOST uaf10
-#  User phchang
-#  Hostname uaf-10.t2.ucsd.edu
-#  GSSAPIAuthentication yes
-#  GSSAPIDelegateCredentials yes
-#
-#HOST uaf6
-#  User phchang
-#  Hostname uaf-6.t2.ucsd.edu
-#  GSSAPIAuthentication yes
-#  GSSAPIDelegateCredentials yes
-#
-#HOST uaf7
-#  User phchang
-#  Hostname uaf-7.t2.ucsd.edu
-#  GSSAPIAuthentication yes
-#  GSSAPIDelegateCredentials yes
-#  IdentityFile ~/.ssh/id_rsa
-#  ForwardAgent yes
-#  ForwardX11   yes
-#  ForwardX11Trusted  yes
-#
-#HOST uaf9
-#  User phchang
-#  Hostname uaf-9.t2.ucsd.edu
-#  GSSAPIAuthentication yes
-#  GSSAPIDelegateCredentials yes
-#  IdentityFile ~/.ssh/id_rsa
-#  ForwardAgent yes
-#  ForwardX11   yes
-#  ForwardX11Trusted  yes
-#
-#HOST uaf8
-#  User phchang
-#  Hostname uaf-8.t2.ucsd.edu
-#  GSSAPIAuthentication yes
-#  GSSAPIDelegateCredentials yes
+Host phi
+  Hostname phiphi.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
 
 HOST lxpnew
   User phchang
