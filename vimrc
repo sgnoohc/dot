@@ -9,7 +9,7 @@ endif
 " Required:
 set runtimepath+=~/.vim/bundle/neobundle.vim/
 " Required:
-call neobundle#begin(expand('/home/users/phchang/.vim/bundle'))
+call neobundle#begin(expand('~/.vim/bundle'))
 " Let NeoBundle manage NeoBundle
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
