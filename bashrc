@@ -1,0 +1,373 @@
+#=============================================================================#
+#  .                                                                          #
+# ..: philip.chang, university of california san diego, physics dept.         #
+#                                                                             #
+#                  _______ _______  ______ _     _      _____                 #
+#                  |  |  | |_____| |_____/ |____/         |                   #
+#                  |  |  | |     | |    \_ |    \_      __|__                 #
+#                                                                             #
+#=============================================================================#
+
+# source global definitions
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc;
+fi
+
+BASHFUNCTIONS="bash"
+
+source ~/login/${BASHFUNCTIONS}/greeting.sh
+
+# === Interface === #
+
+function info() {
+  echo "..:                ""$1"
+}
+
+function jarvisinfo() {
+  echo "..: J.A.R.V.I.S. : ""$1"
+}
+
+function banner() {
+  echo "#=============================================================================#"
+  echo "#  .                                                                          #"
+  echo "# ..: philip.chang, university of california san diego, physics dept.         #"
+  echo "#                                                                             #"
+  echo "#                  _______ _______  ______ _     _      _____                 #"
+  echo "#                  |  |  | |_____| |_____/ |____/         |                   #"
+  echo "#                  |  |  | |     | |    \_ |    \_      __|__                 #"
+  echo "#                                                                             #"
+  echo "#=============================================================================#"
+}
+
+function bannercolor() {
+  echo -e "#=============================================================================#"
+  echo -e "#  .                                                                          #"
+  echo -e "# ..: philip.chang, university of california san diego, physics dept.         #"
+  echo -e "#                                                                             #"
+  echo -e "#                  \033[1;31m_______ _______  ______ _     _      ______                \033[0m#"
+  echo -e "#                  \033[1;33m|  |  | |\033[31m_____\033[1;33m| |\033[31m_____/ \033[1;33m|\033[31m____/        \033[1;33m|  |\033[0m                 #"
+  echo -e "#                  \033[1;33m|  |  | |     | |    \033[31m\_ \033[1;33m|    \033[31m\_      _\033[1;33m|\033[31m__\033[1;33m|\033[31m_                \033[0m#"
+  echo -e "#                                                                             #"
+  echo -e "#=============================================================================#"
+}
+
+function bannerlite() {
+#  echo -e "#=============================================================================#"
+  echo -e " ."
+  info "philip.chang, university of california san diego, physics dept."
+  info ""
+#  echo -e "#                                                                             #"
+#  echo -e "#                  \033[1;31m_______ _______  ______ _     _      _____                 \033[0m#"
+#  echo -e "#                  \033[1;33m|  |  | |\033[31m_____\033[1;33m| |\033[31m_____/ \033[1;33m|\033[31m____/         \033[1;33m|\033[0m                   #"
+#  echo -e "#                  \033[1;33m|  |  | |     | |    \033[31m\_ \033[1;33m|    \033[31m\_      __\033[1;33m|\033[31m__                 \033[0m#"
+#  echo -e "#                                                                             #"
+#  echo -e "#=============================================================================#"
+}
+
+function jarvishelp() {
+  jarvisinfo "Sir, you're memory seems to be fading."
+  jarvisinfo "I recommend exercising terminal more often."
+  jarvisinfo "Here are the list of custom functions ..."
+  jarvisinfo "You can also see this by 'typeset -F'"
+  jarvisinfo "Press enter to see the list ..."
+  read dummy
+  typeset -F | grep "_" | grep -v "hpx" | grep -v "cern" | awk '{print $3}'
+}
+
+function jarviscal() {
+  #jarvisinfo "Current time and date is $(echo `date`)"
+  info "Current time and date is $(echo `date`)"
+  if [[ "${THISOS}" == "Mac" ]]; then
+    CALOUTPUT="/tmp/cal.out"
+    CALCMD="cal"
+    script $CALOUTPUT "$CALCMD" &> /dev/null
+  else
+    CALOUTPUT="/tmp/cal.out"
+    CALCMD="cal -3"
+    script -c "$CALCMD" $CALOUTPUT &> /dev/null
+  fi
+  info ""
+  for i in `seq 2 8`; do
+    info "$(cat ${CALOUTPUT} | head -n${i} | tail -n1)"
+  done
+}
+
+function jarvistodo() {
+  info ""
+  jarvisinfo "Here are your TODO lists ..."
+  export TODO="$HOME/login/todo.txt"
+  NTODOS=$(badoop | wc -l)
+  info ""
+  if [ $NTODOS -eq 0 ]; then
+    info "You have no TODO's added. Perhaps you need to? or Are you taking a break?"
+  else
+    for i in `seq 1 ${NTODOS}`; do
+      info "$(badoop | head -n${i} | tail -n1)"
+    done
+  fi
+  info ""
+}
+
+function jarvislastupdate() {
+  cd ~/login/
+  jarvisinfo "Login package has been last updated at"
+  info ""
+  info "$(svn info | tail -n2 | head -n1)"
+  cd - &> /dev/null
+  info ""
+}
+
+function jarvisdetectOS() {
+  #jarvisinfo "Detecting OS environment ..."
+  if [ "$(uname)" == "Darwin" ]; then
+    #info "Detected Mac OS X operating system!"
+    _promptcolor 38
+    export THISOS="Mac"
+  elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    #info "Detected Linux operating system ..."
+    _promptcolor 38
+    export THISOS="Linux"
+    cat ~/login/.hostname | tail -n 4 > ~/login/.hostnamebak
+    'mv' ~/login/.hostnamebak ~/login/.hostname
+    echo $HOSTNAME >> ~/login/.hostname
+    export TERM=xterm-256color
+  else
+    _promptcolor 33
+    export THISOS="Windows"
+  fi
+}
+
+function jarvisprelim() {
+  #jarvisinfo "System starting ..."
+  #info "Setting up global definitions ..."
+
+  #info "Disabling ctrl-d"
+  # ignore ctrl-d
+  set -o ignoreeof
+}
+
+function jarvisbinpath() {
+  #jarvisinfo "Adding PATH env"
+  #info "Adding /usr/local/bin/ to PATH"
+  export PATH="/usr/local/bin:$PATH"
+  #info "Adding login/scripts to PATH"
+
+  #export PATH="~/login/bin:$PATH"
+  export PATH="~/software/bin:$PATH"
+  #export PYTHONPATH="$HOME/login/bin/:$PYTHONPATH"
+  #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
+}
+
+function jarvissetupalias() {
+  #jarvisinfo "Setting up aliases"
+  export CLICOLOR=1
+  if [ "${THISOS}" == "Mac" ]; then
+    alias ls='ls -h -G'
+    alias ll='ls -lh -G'
+    alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
+  else
+    alias le='ls -lhB --group-directories-first --color=auto --sort=extension'
+    alias ll='ls -lhB --group-directories-first --color=auto'
+    alias ls='ls -hB --group-directories-first --color=auto'
+  fi
+  alias pd='pushd'
+  alias tmux='TERM=xterm-256color tmux -2'
+  alias tmuxinator='TERM=xterm-256color tmuxinator'
+  alias mux='TERM=xterm-256color mux'
+  alias xd='cd ~/public_html/tasutil; source root.sh; cd ProjectMetis/; source setup.sh; cd ..'
+  alias cp='cp -iv'        # Preferred 'cp' implementation
+  alias mv='mv -iv'        # Preferred 'mv' implementation
+  alias mkdir='mkdir -pv'  # Preferred 'mkdir' implementation
+}
+
+function jarvisloadcustomfunction() {
+  #jarvisinfo "Loading all custom bash functions"
+  # === custom functions === #
+  source ~/login/${BASHFUNCTIONS}/framework.sh
+  source ~/login/${BASHFUNCTIONS}/lxplus.sh
+  source ~/login/${BASHFUNCTIONS}/lxbatch.sh
+  source ~/login/${BASHFUNCTIONS}/eos.sh
+  source ~/login/${BASHFUNCTIONS}/filehandling.sh
+  source ~/login/${BASHFUNCTIONS}/apache.sh
+  source ~/login/${BASHFUNCTIONS}/utilities.sh
+  source ~/login/${BASHFUNCTIONS}/login.sh
+  source ~/login/${BASHFUNCTIONS}/ssh.sh
+  source ~/login/${BASHFUNCTIONS}/notes.sh
+  source ~/login/${BASHFUNCTIONS}/mac.sh
+  source ~/login/${BASHFUNCTIONS}/niceplot.sh
+}
+
+function jarvisbasheditorset() {
+  #jarvisinfo "Setting vi edtior mode for bash"
+  # === editor === #
+  VISUAL=vim; export VISUAL
+  EDITOR=vim; export EDITOR
+  set -o vi
+  bind '"jk":vi-movement-mode'
+}
+
+function jarvistimezone() {
+  #jarvisinfo "Stting time zone to America/Chicago"
+  export TZ="/usr/share/zoneinfo/America/Los_Angeles"
+  #export TZ="/usr/share/zoneinfo/Europe/Paris"
+}
+
+#function jarvisreportsuccess() {
+#  info "Initiating module : "$USER"."
+#  info "All systems are ready."
+#  info ""
+#}
+
+function jarvisfileextensioncolor() {
+  export LS_COLORS="no=00:ow=100;34:fi=00:di=01;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;32:*.cmd=00;32:*.exe=00;32:*.com=00;32:*.btm=00;32:*.bat=00;32:*.sh=01;32:*.csh=00;32:*.tar=00;31:*.tgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.bz=00;31:*.tz=00;31:*.rpm=00;31:*.cpio=00;31:*.jpg=00;35:*.gif=00;35:*.bmp=00;35:*.xbm=00;35:*.xpm=00;35:*.png=00;35:*.tif=00;35::*.root=00;35:*.py=00;34:"
+}
+
+function jarvissetupatlas() {
+  export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
+  alias setupATLAS='source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh'
+}
+
+#--- changes prompt color
+function _promptcolor(){
+	PS1='\[\e[1;'$1'm\][\h@\u \w ]\[\e[0m\]\n$ '
+}
+
+function _setX11() {
+  export DISPLAY=$(cat ~/login/.display)
+}
+
+#------------------------------------------------------------------------
+#
+#
+#  Functions
+#
+#
+#------------------------------------------------------------------------
+
+function _ctags() {
+  FULLPATH=$('cd' $(dirname $1); pwd)/$(basename $1)
+  ctags -f .tags -R $FULLPATH/
+}
+
+function _setupSCRAM() {
+  source /code/osgcode/cmssoft/cmsset_default.sh  > /dev/null 2>&1
+  export SCRAM_ARCH=slc6_amd64_gcc530   # or whatever scram_arch you need for your desired CMSSW release
+}
+
+function _newsetupCMS() {
+  source /code/osgcode/cmssoft/cmsset_default.sh  > /dev/null 2>&1
+  export SCRAM_ARCH=slc6_amd64_gcc530   # or whatever scram_arch you need for your desired CMSSW release
+  cd /home/users/phchang/cmssw
+}
+
+function _createSetupCMS() {
+
+    # Environment setting same as my ditto environment
+    echo "" > setup_cmssw.sh
+    echo "source /code/osgcode/cmssoft/cmsset_default.sh  > /dev/null 2>&1" >> setup_cmssw.sh
+    if [ -z $2 ]; then
+        export SCRAM_ARCH=slc6_amd64_gcc530   # or whatever scram_arch you need for your desired CMSSW release
+        echo "export SCRAM_ARCH=slc6_amd64_gcc530" >> setup_cmssw.sh
+    else
+        export SCRAM_ARCH=$2
+        echo "export SCRAM_ARCH=$2" >> setup_cmssw.sh
+    fi
+    if [ -z $1 ]; then
+        export CMSSW_VERSION=CMSSW_8_0_18
+        echo "export CMSSW_VERSION=CMSSW_8_0_18" >> setup_cmssw.sh
+    else
+        export CMSSW_VERSION=$1
+        echo "export CMSSW_VERSION=$1" >> setup_cmssw.sh
+    fi
+    echo "echo Setting up CMSSW for $CMSSW_VERSION for $SCRAM_ARCH" >> setup_cmssw.sh
+    echo "cd /cvmfs/cms.cern.ch/$SCRAM_ARCH/cms/cmssw/$CMSSW_VERSION/src" >> setup_cmssw.sh
+    echo "eval \`scramv1 runtime -sh\`" >> setup_cmssw.sh
+    echo "cd -" >> setup_cmssw.sh
+}
+
+function _setupCMS() {
+
+
+  # Environment setting same as my ditto environment
+  source /code/osgcode/cmssoft/cmsset_default.sh  > /dev/null 2>&1
+  if [ -z $2 ]; then
+    export SCRAM_ARCH=slc6_amd64_gcc530   # or whatever scram_arch you need for your desired CMSSW release
+  else
+    export SCRAM_ARCH=$2
+  fi
+  if [ -z $1 ]; then
+    export CMSSW_VERSION=CMSSW_8_0_18
+  else
+    export CMSSW_VERSION=$1
+  fi
+  echo $SCRAM_ARCH
+  echo $CMSSW_VERSION
+  cd /cvmfs/cms.cern.ch/$SCRAM_ARCH/cms/cmssw/$CMSSW_VERSION/src
+  eval `scramv1 runtime -sh`
+  cd -
+
+}
+export -f _setupCMS
+
+#--- my condor_q
+function _condor_q() {
+    condor_q $USER $1 -const 'JobStatus==2' -l | grep -E "(^ClusterId =|RemoteHost)" | cut -d '=' -f2 | xargs -n 2
+}
+
+function _setPS1() {
+    PS1='[\[\e[1;37m\]\h@\u \w \[\e[0m\]]\n[\[\e[4;49;'92'm\]'$1'\[\e[0m\]]$ '
+}
+
+#--- prints all of my process
+function _myps() {
+  ps -u $USER
+}
+
+#--- prints all of my process (detailed)
+function _mypsa() {
+  ps aux | grep $USER
+}
+
+
+#------------------------------------------------------------------------
+#
+#
+#  Main
+#
+#
+#------------------------------------------------------------------------
+
+# === detecting systems === #
+#bannercolor
+bannerlite
+jarvisprelim
+jarvisdetectOS
+jarvisbinpath
+jarvissetupalias
+jarvisloadcustomfunction
+jarvisbasheditorset
+jarvistimezone
+#jarvisreportsuccess
+jarvisfileextensioncolor
+#jarvissetupatlas
+
+# === login items === #
+
+#greeting
+
+#
+# Svn info
+#
+#jarvislastupdate
+
+#
+# Calendar
+#
+jarviscal
+
+#
+# Todo list
+#
+#jarvistodo
+
+#eof
