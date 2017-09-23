@@ -340,22 +340,22 @@ endif
 set laststatus=2
 set t_Co=256
 set cmdheight=1
+let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline#extensions#tabline#show_buffers = 1
 
 let g:airline_theme='badwolf'
 let g:tagbar_ctags_bin='~/software/bin/ctags'
 
 "nmap <F8> :TagbarToggle<CR>
 "autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-"
+
 "map <C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 set term=screen-256color
 
 color wombat256mod
-
-"execute pathogen#infect()
 
 
 "map <C-c> :s/^/\/\//<Enter><Space>
