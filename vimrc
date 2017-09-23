@@ -7,7 +7,7 @@ if &compatible
   set nocompatible               " Be iMproved
 endif
 " Required:
-set runtimepath+=/home/users/phchang/.vim/bundle/neobundle.vim/
+set runtimepath+=~/.vim/bundle/neobundle.vim/
 " Required:
 call neobundle#begin(expand('/home/users/phchang/.vim/bundle'))
 " Let NeoBundle manage NeoBundle
@@ -23,6 +23,7 @@ NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 NeoBundle 'vim-airline/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'
+NeoBundle 'vim-scripts/a.vim'
 " Required:
 call neobundle#end()
 " Required:
@@ -33,7 +34,7 @@ NeoBundleCheck
 "End NeoBundle Scripts-------------------------
 
 
-source $HOME/login/vim/a.vim
+"source $HOME/login/vim/a.vim
 "source $HOME/login/vim/minibufexpl.vim
 "source $HOME/login/vim/vim-geeknote-master/plugin/vim_geeknote.vim
 "source $HOME/login/vim/taglist.vim
