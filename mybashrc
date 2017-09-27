@@ -178,6 +178,7 @@ function jarvissetupalias() {
   alias cp='cp -iv'        # Preferred 'cp' implementation
   alias mv='mv -iv'        # Preferred 'mv' implementation
   alias mkdir='mkdir -pv'  # Preferred 'mkdir' implementation
+  alias phys='source ~/public_html/phys/scripts/setup.sh; cd public_html/analysis'
 }
 
 #function jarvisloadcustomfunction() {
@@ -335,6 +336,10 @@ function _myps() {
 #--- prints all of my process (detailed)
 function _mypsa() {
   ps aux | grep $USER
+}
+
+function _fullpath(){
+  echo $('cd' $(dirname $1); pwd)/$(basename $1)
 }
 
 
