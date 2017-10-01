@@ -309,6 +309,7 @@ function jarvisupdate() {
     echo "Warning - dot repository diverged!!"
     echo "Please fix this."
   fi
+  cd
 }
 
 #--- changes prompt color
