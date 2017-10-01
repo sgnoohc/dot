@@ -178,6 +178,7 @@ function jarvissetupalias() {
   alias cp='cp -iv'        # Preferred 'cp' implementation
   alias mv='mv -iv'        # Preferred 'mv' implementation
   alias mkdir='mkdir -pv'  # Preferred 'mkdir' implementation
+  alias phys='source ~/public_html/phys/scripts/setup.sh; cd public_html/analysis'
 }
 
 #function jarvisloadcustomfunction() {
@@ -337,10 +338,13 @@ function _mypsa() {
   ps aux | grep $USER
 }
 
+function _fullpath(){
+  echo $('cd' $(dirname $1); pwd)/$(basename $1)
+}
+
 function uafd() {
   ssh -t -Y uaf-$1  '~/software/bin/screen -r -d'
 }
-
 
 #------------------------------------------------------------------------
 #
