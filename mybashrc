@@ -284,6 +284,38 @@ function jarvisphisetup() {
 function jarvisupdate() {
   DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   cd $DIR
+  UPSTREAM=${1:-'@{u}'}
+  LOCAL=$(git rev-parse @)
+  REMOTE=$(git rev-parse "$UPSTREAM")
+  BASE=$(git merge-base @ "$UPSTREAM")
+  if [ $LOCAL = $REMOTE ]; then
+    echo "dot repository is Up-to-date"
+  elif [ $LOCAL = $BASE ]; then
+    echo "dot repository needs to pull"
+    read -r -p "Are you sure? [y/N] " response
+    case "$response" in
+      [yY][eE][sS]|[yY]) 
+        git pull
+        ;;
+      *)
+        "not pulling"
+        ;;
+    esac
+  elif [ $REMOTE = $BASE ]; then
+    echo "dot repository needs to push"
+    read -r -p "Are you sure? [y/N] " response
+    case "$response" in
+      [yY][eE][sS]|[yY]) 
+        git push
+        ;;
+      *)
+        "not pushing"
+        ;;
+    esac
+  else
+    echo "Warning - dot repository diverged!!"
+    echo "Please fix this."
+  fi
 }
 
 #--- changes prompt color
@@ -436,5 +468,7 @@ jarviscal
 # Todo list
 #
 #jarvistodo
+
+jarvisupdate
 
 #eof
