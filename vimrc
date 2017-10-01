@@ -100,6 +100,7 @@ autocmd BufNewFile,BufRead *.def set syntax=cfg
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 
 nnoremap <Leader>rw :%s/\s\+$//e<CR>
+vnoremap gw :s![^ ]\zs  \+! !g<CR>
 
 "set formatoptions=
 
@@ -377,10 +378,11 @@ color wombat256mod
 "nnoremap <Leader>c{ :s/){/)\ {/g<CR>
 
 " Use artistic style
-autocmd BufNewFile,BufRead *.cxx set formatprg=astyle\ -s4UHOxgA1pDxbEfxj
-autocmd BufNewFile,BufRead *.cc set formatprg=astyle\ -s4UHOxgA1pDxbEfxj
-autocmd BufNewFile,BufRead *.C set formatprg=astyle\ -s4UHOxgA1pDxbEfxj
-autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -s4UHOxgA1pDxbEfxj
+autocmd BufNewFile,BufRead *.cxx set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
+autocmd BufNewFile,BufRead *.cc set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
+autocmd BufNewFile,BufRead *.C set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
+autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
+"autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -s4UHOxgA1pDxbEfxjU
 
 " Add expression under cursor in real time
 nnoremap <leader>cc ciW<C-r>=<C-r>"<CR><Esc>
