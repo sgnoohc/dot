@@ -284,6 +284,7 @@ function jarvisphisetup() {
 function jarvisupdate() {
   DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   cd $DIR
+  git remote update
   UPSTREAM=${1:-'@{u}'}
   LOCAL=$(git rev-parse @)
   REMOTE=$(git rev-parse "$UPSTREAM")
