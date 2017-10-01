@@ -391,6 +391,9 @@ function _fullpath(){
   echo $('cd' $(dirname $1); pwd)/$(basename $1)
 }
 
+function uafd() {
+  ssh -t -Y uaf-$1  '~/software/bin/screen -r -d'
+}
 
 #------------------------------------------------------------------------
 #
