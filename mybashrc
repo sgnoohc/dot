@@ -281,6 +281,7 @@ function jarvisphisetup() {
   fi
 }
 
+# Checking whether repository needs to push/pull
 function jarvisupdate() {
   DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   cd $DIR
