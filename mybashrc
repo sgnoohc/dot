@@ -337,6 +337,10 @@ function _mypsa() {
   ps aux | grep $USER
 }
 
+function uafd() {
+  ssh -t -Y uaf-$1  '~/software/bin/screen -r -d'
+}
+
 
 #------------------------------------------------------------------------
 #
