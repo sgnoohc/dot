@@ -421,6 +421,13 @@ function uafd() {
   ssh -t -Y uaf-$1  '~/software/bin/screen -r -d'
 }
 
+function phiphi() {
+  . /opt/intel/bin/iccvars.sh intel64
+  export PATH=$PATH:$HOME/.local/bin:$HOME/bin:/opt/intel/mic/bin
+  . /opt/rh/devtoolset-2/enable
+  source ~matevz/root/bin/thisroot.sh
+}
+
 #------------------------------------------------------------------------
 #
 #
