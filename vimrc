@@ -351,10 +351,10 @@ let g:airline#extensions#tabline#show_buffers = 1
 let g:airline_theme='badwolf'
 let g:tagbar_ctags_bin='~/software/bin/ctags'
 
-"nmap <F8> :TagbarToggle<CR>
-"autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+nmap <F8> :TagbarToggle<CR>
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-"map <C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+map <C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 set term=screen-256color
 
