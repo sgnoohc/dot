@@ -161,6 +161,7 @@ function jarvissetupalias() {
     alias le='ls -lhB --group-directories-first --color=auto --sort=extension'
     alias ll='ls -lhB --group-directories-first --color=auto'
     alias ls='ls -hB --group-directories-first --color=auto'
+    alias lse='ls -hB --group-directories-first --color=auto --sort=extension'
   fi
   alias pd='pushd'
   alias tmux='TERM=xterm-256color tmux -2'
@@ -173,6 +174,7 @@ function jarvissetupalias() {
   alias phys='source ~/public_html/phys/scripts/setup.sh;'
   alias sweepgitrepos='for dir in $(ls -d *); do echo ""; echo $dir; echo "=========================="; cd $dir; git status -uno 2>/dev/null | grep -E "modified|On\ branch"; cd ../; done'
   alias gsetup='voms-proxy-init -hours 168 -voms cms -rfc'
+  alias git='/usr/bin/git'
 }
 
 #function jarvisloadcustomfunction() {
@@ -276,11 +278,11 @@ function jarvisphisetup() {
 function jarvisupdate() {
   DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   cd $DIR
-  git remote update
+  /usr/bin/git remote update
   UPSTREAM=${1:-'@{u}'}
-  LOCAL=$(git rev-parse @)
-  REMOTE=$(git rev-parse "$UPSTREAM")
-  BASE=$(git merge-base @ "$UPSTREAM")
+  LOCAL=$(/usr/bin/git rev-parse @)
+  REMOTE=$(/usr/bin/git rev-parse "$UPSTREAM")
+  BASE=$(/usr/bin/git merge-base @ "$UPSTREAM")
   if [ $LOCAL = $REMOTE ]; then
     echo "dot repository is Up-to-date"
   elif [ $LOCAL = $BASE ]; then
@@ -288,7 +290,7 @@ function jarvisupdate() {
     read -r -p "Are you sure? [y/N] " response
     case "$response" in
       [yY][eE][sS]|[yY]) 
-        git pull
+        /usr/bin/git pull
         ;;
       *)
         "not pulling"
@@ -299,7 +301,7 @@ function jarvisupdate() {
     read -r -p "Are you sure? [y/N] " response
     case "$response" in
       [yY][eE][sS]|[yY]) 
-        git push
+        /usr/bin/git push
         ;;
       *)
         "not pushing"
