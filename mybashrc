@@ -108,15 +108,6 @@ function jarviscal() {
 #  info ""
 #}
 
-#function jarvislastupdate() {
-#  cd ~/login/
-#  jarvisinfo "Login package has been last updated at"
-#  info ""
-#  info "$(svn info | tail -n2 | head -n1)"
-#  cd - &> /dev/null
-#  info ""
-#}
-
 function jarvisdetectOS() {
   #jarvisinfo "Detecting OS environment ..."
   if [ "$(uname)" == "Darwin" ]; then
@@ -154,6 +145,7 @@ function jarvisbinpath() {
 
   #export PATH="~/login/bin:$PATH"
   export PATH="~/software/bin:$PATH"
+  export PATH="~/syncfiles/pyfiles:$PATH"
   #export PYTHONPATH="$HOME/login/bin/:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
 }
@@ -178,6 +170,9 @@ function jarvissetupalias() {
   alias cp='cp -iv'        # Preferred 'cp' implementation
   alias mv='mv -iv'        # Preferred 'mv' implementation
   alias mkdir='mkdir -pv'  # Preferred 'mkdir' implementation
+  alias phys='source ~/public_html/phys/scripts/setup.sh;'
+  alias sweepgitrepos='for dir in $(ls -d *); do echo ""; echo $dir; echo "=========================="; cd $dir; git status -uno 2>/dev/null | grep -E "modified|On\ branch"; cd ../; done'
+  alias gsetup='voms-proxy-init -hours 168 -voms cms -rfc'
 }
 
 #function jarvisloadcustomfunction() {
@@ -219,7 +214,48 @@ function jarvistimezone() {
 #}
 
 function jarvisfileextensioncolor() {
-  export LS_COLORS="no=00:ow=100;34:fi=00:di=01;34:ln=00;36:pi=40;33:so=00;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=00;32:*.cmd=00;32:*.exe=00;32:*.com=00;32:*.btm=00;32:*.bat=00;32:*.sh=01;32:*.csh=00;32:*.tar=00;31:*.tgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.gz=00;31:*.bz2=00;31:*.bz=00;31:*.tz=00;31:*.rpm=00;31:*.cpio=00;31:*.jpg=00;35:*.gif=00;35:*.bmp=00;35:*.xbm=00;35:*.xpm=00;35:*.png=00;35:*.tif=00;35::*.root=00;35:*.py=00;34:"
+  export LS_COLORS="no=00"
+  export LS_COLORS=$LS_COLORS:"ow=100;34"
+  export LS_COLORS=$LS_COLORS:"fi=00"
+  export LS_COLORS=$LS_COLORS:"ex=00"
+  export LS_COLORS=$LS_COLORS:"di=01;34"
+  export LS_COLORS=$LS_COLORS:"ln=00;36"
+  export LS_COLORS=$LS_COLORS:"pi=40;33"
+  export LS_COLORS=$LS_COLORS:"so=00;35"
+  export LS_COLORS=$LS_COLORS:"bd=40;33;01"
+  export LS_COLORS=$LS_COLORS:"cd=40;33;01"
+  export LS_COLORS=$LS_COLORS:"or=01;05;37;41"
+  export LS_COLORS=$LS_COLORS:"mi=01;05;37;41"
+  export LS_COLORS=$LS_COLORS:"*.py=00;34"
+  export LS_COLORS=$LS_COLORS:"*.cmd=00;32"
+  export LS_COLORS=$LS_COLORS:"*.exe=00;32"
+  export LS_COLORS=$LS_COLORS:"*.com=00;32"
+  export LS_COLORS=$LS_COLORS:"*.btm=00;32"
+  export LS_COLORS=$LS_COLORS:"*.bat=00;32"
+  export LS_COLORS=$LS_COLORS:"*.sh=00;32"
+  export LS_COLORS=$LS_COLORS:"*.csh=00;32"
+  export LS_COLORS=$LS_COLORS:"*.tar=00;31"
+  export LS_COLORS=$LS_COLORS:"*.tgz=00;31"
+  export LS_COLORS=$LS_COLORS:"*.arj=00;31"
+  export LS_COLORS=$LS_COLORS:"*.taz=00;31"
+  export LS_COLORS=$LS_COLORS:"*.lzh=00;31"
+  export LS_COLORS=$LS_COLORS:"*.zip=00;31"
+  export LS_COLORS=$LS_COLORS:"*.z=00;31"
+  export LS_COLORS=$LS_COLORS:"*.Z=00;31"
+  export LS_COLORS=$LS_COLORS:"*.gz=00;31"
+  export LS_COLORS=$LS_COLORS:"*.bz2=00;31"
+  export LS_COLORS=$LS_COLORS:"*.bz=00;31"
+  export LS_COLORS=$LS_COLORS:"*.tz=00;31"
+  export LS_COLORS=$LS_COLORS:"*.rpm=00;31"
+  export LS_COLORS=$LS_COLORS:"*.cpio=00;31"
+  export LS_COLORS=$LS_COLORS:"*.jpg=00;35"
+  export LS_COLORS=$LS_COLORS:"*.gif=00;35"
+  export LS_COLORS=$LS_COLORS:"*.bmp=00;35"
+  export LS_COLORS=$LS_COLORS:"*.xbm=00;35"
+  export LS_COLORS=$LS_COLORS:"*.xpm=00;35"
+  export LS_COLORS=$LS_COLORS:"*.png=00;35"
+  export LS_COLORS=$LS_COLORS:"*.tif=00;35"
+  export LS_COLORS=$LS_COLORS:"*.root=00;35"
 }
 
 function jarvissetupatlas() {
@@ -234,6 +270,46 @@ function jarvisphisetup() {
     . /opt/rh/devtoolset-2/enable
     source ~matevz/root/bin/thisroot.sh
   fi
+}
+
+# Checking whether repository needs to push/pull or something else.
+function jarvisupdate() {
+  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  cd $DIR
+  git remote update
+  UPSTREAM=${1:-'@{u}'}
+  LOCAL=$(git rev-parse @)
+  REMOTE=$(git rev-parse "$UPSTREAM")
+  BASE=$(git merge-base @ "$UPSTREAM")
+  if [ $LOCAL = $REMOTE ]; then
+    echo "dot repository is Up-to-date"
+  elif [ $LOCAL = $BASE ]; then
+    echo "dot repository needs to pull"
+    read -r -p "Are you sure? [y/N] " response
+    case "$response" in
+      [yY][eE][sS]|[yY]) 
+        git pull
+        ;;
+      *)
+        "not pulling"
+        ;;
+    esac
+  elif [ $REMOTE = $BASE ]; then
+    echo "dot repository needs to push"
+    read -r -p "Are you sure? [y/N] " response
+    case "$response" in
+      [yY][eE][sS]|[yY]) 
+        git push
+        ;;
+      *)
+        "not pushing"
+        ;;
+    esac
+  else
+    echo "Warning - dot repository diverged!!"
+    echo "Please fix this."
+  fi
+  cd -
 }
 
 #--- changes prompt color
@@ -337,6 +413,13 @@ function _mypsa() {
   ps aux | grep $USER
 }
 
+function _fullpath(){
+  echo $('cd' $(dirname $1); pwd)/$(basename $1)
+}
+
+function uafd() {
+  ssh -t -Y uaf-$1  '~/software/bin/screen -r -d'
+}
 
 #------------------------------------------------------------------------
 #
@@ -364,20 +447,7 @@ jarvisphisetup
 # === login items === #
 
 #greeting
-
-#
-# Svn info
-#
-#jarvislastupdate
-
-#
-# Calendar
-#
 jarviscal
-
-#
-# Todo list
-#
-#jarvistodo
+jarvisupdate
 
 #eof

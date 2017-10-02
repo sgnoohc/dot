@@ -24,6 +24,8 @@ NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 NeoBundle 'vim-airline/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'vim-scripts/a.vim'
+NeoBundle 'junegunn/vim-easy-align'
+NeoBundle 'Align'
 " Required:
 call neobundle#end()
 " Required:
@@ -98,6 +100,7 @@ autocmd BufNewFile,BufRead *.def set syntax=cfg
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 
 nnoremap <Leader>rw :%s/\s\+$//e<CR>
+vnoremap gw :s![^ ]\zs  \+! !g<CR>
 
 "set formatoptions=
 
@@ -375,10 +378,11 @@ color wombat256mod
 "nnoremap <Leader>c{ :s/){/)\ {/g<CR>
 
 " Use artistic style
-autocmd BufNewFile,BufRead *.cxx set formatprg=astyle\ -s4UHOxgA1pDxbExC120fxj
-autocmd BufNewFile,BufRead *.cc set formatprg=astyle\ -s4UHOxgA1pDxbExC120fxj
-autocmd BufNewFile,BufRead *.C set formatprg=astyle\ -s4UHOxgA1pDxbExC120fxj
-autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -s4UHOxgA1pDxbExC120fxj
+autocmd BufNewFile,BufRead *.cxx set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
+autocmd BufNewFile,BufRead *.cc set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
+autocmd BufNewFile,BufRead *.C set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
+autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
+"autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -s4UHOxgA1pDxbEfxjU
 
 " Add expression under cursor in real time
 nnoremap <leader>cc ciW<C-r>=<C-r>"<CR><Esc>
@@ -390,5 +394,19 @@ inoremap <C-d> <Del>
 "nnoremap ,/ I//<Esc>  " c/c++ comment
 "nnoremap ,? I<Del><Del><Esc>  " c/c++ uncomment
 
+let g:alternateExtensions_h = "C,c,cpp,cxx,cc,CC"
+let g:alternateExtensions_H = ""
+let g:alternateExtensions_cpp = "h,hpp"
+let g:alternateExtensions_CPP = "h,hpp"
+let g:alternateExtensions_c = "h"
+let g:alternateExtensions_C = "h"
+let g:alternateExtensions_cxx = "h"
+
+" https://github.com/junegunn/vim-easy-align
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 "eof
