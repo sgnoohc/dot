@@ -26,6 +26,7 @@ NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'vim-scripts/a.vim'
 NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'Align'
+NeoBundle 'roman/golden-ratio'
 " Required:
 call neobundle#end()
 " Required:
