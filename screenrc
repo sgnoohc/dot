@@ -27,7 +27,7 @@
 # %d      : current date (0-padded)
 
 maptimeout 0
-msgwait 1
+msgwait 0.2
 
 bind R eval "source $HOME/.screenrc" "echo '.screenrc reloaded!'"
 
