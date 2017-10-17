@@ -63,7 +63,7 @@ set number
 " keep cursor in the middle
 set scrolloff=999
 " highlight current line
-set cursorline
+"set cursorline
 set nocursorcolumn
 set nowrap
 " tabs are replaced with chracters
@@ -81,6 +81,8 @@ hi CursorLine   cterm=NONE ctermbg=black guibg=darkred guifg=white
 nnoremap <Leader>c :set cursorline! <CR>
 nnoremap <Leader><Leader> :wqa!<CR>
 nnoremap <Leader>] :q<CR>
+
+set pastetoggle=<C-Y>
 
 "set comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,bO:///,O://
 set ic
@@ -167,6 +169,7 @@ map ,5 :s/^%//<CR><Space>     " latex uncomment
 map ," :s/^/"/<CR><Space>     " vimrc comment
 map ,' :s/^"//<CR><Space>     " vimrc uncomment
 
+noremap <Leader>j J
 noremap K 5<up>
 noremap J 5<down>
 
@@ -361,7 +364,24 @@ map <C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 set term=screen-256color
 
-color wombat256mod
+"color wombat256mod
+
+"nmap <F6> :colorscheme wombat256mod<CR>
+"nmap <F7> :colorscheme default<CR>
+
+nnoremap <script> <F7> :call ChangeColorToDefault()<cr>
+function! ChangeColorToDefault()
+    :colorscheme default
+    set cursorline!
+    call writefile([':colorscheme default', 'set cursorline!'], expand('~/.vim/persisted_options.vim'))
+endfunction
+
+nnoremap <script> <F6> :call ChangeColorToWombat()<cr>
+function! ChangeColorToWombat()
+    :colorscheme wombat256mod
+    set cursorline
+    call writefile([':colorscheme wombat256mod', 'set cursorline'], expand('~/.vim/persisted_options.vim'))
+endfunction
 
 
 "map <C-c> :s/^/\/\//<Enter><Space>
@@ -411,5 +431,7 @@ xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+source $HOME/.vim/persisted_options.vim
 
 "eof
