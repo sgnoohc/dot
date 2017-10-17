@@ -2,3 +2,4 @@
 .hostname
 vim/.netrwhist
 vim/bundle/
+vim/persisted_options.vim
