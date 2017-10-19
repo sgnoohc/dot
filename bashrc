@@ -5,7 +5,7 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc;
 fi
 
-function jarvis() {
+function jv() {
   source ~/dot/mybashrc
 }
 
