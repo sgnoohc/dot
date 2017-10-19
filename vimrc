@@ -27,6 +27,7 @@ NeoBundle 'vim-scripts/a.vim'
 NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'Align'
 NeoBundle 'roman/golden-ratio'
+NeoBundle 'soramugi/auto-ctags.vim'
 " Required:
 call neobundle#end()
 " Required:
@@ -360,7 +361,7 @@ let g:tagbar_ctags_bin='~/software/bin/ctags'
 nmap <F8> :TagbarToggle<CR>
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-map <C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+map <C-\> :Ctags<CR>:vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 set term=screen-256color
 
@@ -424,6 +425,9 @@ let g:alternateExtensions_CPP = "h,hpp"
 let g:alternateExtensions_c = "h"
 let g:alternateExtensions_C = "h"
 let g:alternateExtensions_cxx = "h"
+
+" ctags
+let g:auto_ctags_tags_name = '.tags'
 
 " https://github.com/junegunn/vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)

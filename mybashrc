@@ -431,7 +431,7 @@ function _fullpath(){
 }
 
 function uafd() {
-  ssh -t -Y uaf-$1  '~/software/bin/screen -r -d'
+  ssh -t -Y uaf-$1  'tmux attach'
 }
 
 function phiphi() {
@@ -440,6 +440,38 @@ function phiphi() {
   . /opt/rh/devtoolset-2/enable
   source ~matevz/root/bin/thisroot.sh
 }
+
+function sc {
+inpName=$1
+for att in $(screen -ls | grep Attached | awk '{print $1}'); do
+    id=$att
+    att=${att##*.}
+    [ -z "$inpName" ] && echo "Attached: $att"
+    if [[ $inpName == $att ]]; then
+        echo "Can't attach $att because it's already open"
+        return
+    fi
+done
+for det in $(screen -ls | grep Detached | awk '{print $1}'); do
+    id=$det
+    det=${det##*.}
+    [ -z "$inpName" ] && echo "Detached: $det"
+    if [[ $inpName == $det ]]; then
+        screen -r $id
+        return
+    fi
+done
+if [ ! -z "$inpName" ]; then
+    echo "No screens found with that name. Making one!"
+    screen -S $inpName
+fi
+}
+# and also do the autocompletions for screens! :)
+_screenscomp() {
+    screennames=$(sc | grep ":" | cut -d ' ' -f2)
+    COMPREPLY=( $(compgen -W "${screennames}" -- ${COMP_WORDS[COMP_CWORD]}) )
+}
+complete -F _screenscomp sc
 
 
 #------------------------------------------------------------------------
