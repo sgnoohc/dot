@@ -6,3 +6,4 @@ rm .screenrc; ln -s dot/screenrc .screenrc
 rm .vimrc; ln -s dot/vimrc .vimrc
 rm -rf .vim; ln -s dot/vim .vim
 rm .ssh/config; ln -s ~/dot/ssh_config .ssh/config
+rm .tmux.conf; ln -s dot/tmux.conf .tmux.conf
