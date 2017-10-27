@@ -28,6 +28,7 @@ NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'Align'
 NeoBundle 'roman/golden-ratio'
 NeoBundle 'soramugi/auto-ctags.vim'
+NeoBundle 'triglav/vim-visual-increment'
 " Required:
 call neobundle#end()
 " Required:

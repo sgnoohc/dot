@@ -176,7 +176,8 @@ function jarvissetupalias() {
   alias gsetup='voms-proxy-init -hours 168 -voms cms -rfc'
   alias 3wf='cd /home/users/phchang/public_html/phys/FakeRate'
   alias tnp='cd /home/users/phchang/public_html/phys/tnp; export SCRAM_ARCH=slc6_amd64_gcc491; source /cvmfs/cms.cern.ch/cmsset_default.sh; scramv1 project CMSSW CMSSW_7_4_2; cd CMSSW_7_4_2/src; eval `scramv1 runtime -sh`; cd TagAndProbe/Analysis/;'
-  alias 3w='cd /home/users/phchang/public_html/analysis/www/code/www; source scripts/setup.sh'
+  alias 3w='cd /home/users/phchang/public_html/analysis/www/code/www_; source scripts/setup.sh'
+  alias tt='tmux attach'
 #  alias git='/usr/bin/git'
 }
 
