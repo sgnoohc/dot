@@ -432,7 +432,7 @@ function _fullpath(){
 }
 
 function uafd() {
-  ssh -t -Y uaf-$1  'tmux attach'
+  ssh -t -Y uaf-$1  'tmux attach -d'
 }
 
 function phiphi() {
