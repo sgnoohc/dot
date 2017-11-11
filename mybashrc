@@ -178,6 +178,9 @@ function jarvissetupalias() {
   alias tnp='cd /home/users/phchang/public_html/phys/tnp; export SCRAM_ARCH=slc6_amd64_gcc491; source /cvmfs/cms.cern.ch/cmsset_default.sh; scramv1 project CMSSW CMSSW_7_4_2; cd CMSSW_7_4_2/src; eval `scramv1 runtime -sh`; cd TagAndProbe/Analysis/;'
   alias 3w='cd /home/users/phchang/public_html/analysis/www/code/www_; source scripts/setup.sh'
   alias tt='tmux attach'
+  alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source setup.sh;'
+  alias gitone='git --git-dir=.gitone'
+  alias gittwo='git --git-dir=.gittwo'
 #  alias git='/usr/bin/git'
 }
 
@@ -221,9 +224,10 @@ function jarvistimezone() {
 
 function jarvisfileextensioncolor() {
   export LS_COLORS="no=00"
+  export LS_COLORS=$LS_COLORS:"*.py=00;34"
   export LS_COLORS=$LS_COLORS:"ow=100;34"
   export LS_COLORS=$LS_COLORS:"fi=00"
-  export LS_COLORS=$LS_COLORS:"ex=00"
+  export LS_COLORS=$LS_COLORS:"ex=00;33"
   export LS_COLORS=$LS_COLORS:"di=01;34"
   export LS_COLORS=$LS_COLORS:"ln=00;36"
   export LS_COLORS=$LS_COLORS:"pi=40;33"
@@ -232,7 +236,6 @@ function jarvisfileextensioncolor() {
   export LS_COLORS=$LS_COLORS:"cd=40;33;01"
   export LS_COLORS=$LS_COLORS:"or=01;05;37;41"
   export LS_COLORS=$LS_COLORS:"mi=01;05;37;41"
-  export LS_COLORS=$LS_COLORS:"*.py=00;34"
   export LS_COLORS=$LS_COLORS:"*.cmd=00;32"
   export LS_COLORS=$LS_COLORS:"*.exe=00;32"
   export LS_COLORS=$LS_COLORS:"*.com=00;32"

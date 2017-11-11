@@ -27,7 +27,7 @@ NeoBundle 'vim-scripts/a.vim'
 NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'Align'
 NeoBundle 'roman/golden-ratio'
-NeoBundle 'soramugi/auto-ctags.vim'
+"NeoBundle 'soramugi/auto-ctags.vim'
 NeoBundle 'triglav/vim-visual-increment'
 " Required:
 call neobundle#end()
@@ -347,6 +347,13 @@ if exists('$CMSSW_BASE')
     set complete-=i
 endif
 
+if exists('$ANALYSIS_BASE')
+    " search CMS3 first, then local CMSSW, then central CMSSW
+    set path+=$ANALYSIS_BASE
+    " remove includes from autocomplete search list, otherwise slow
+    set complete-=i
+endif
+
 " Airline vim settings
 set laststatus=2
 set t_Co=256
@@ -357,12 +364,13 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#show_buffers = 1
 
 let g:airline_theme='badwolf'
-let g:tagbar_ctags_bin='~/software/bin/ctags'
+"let g:tagbar_ctags_bin='~/software/bin/ctags'
 
 nmap <F8> :TagbarToggle<CR>
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-map <C-\> :Ctags<CR>:vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+"map <C-\> :Ctags<CR>:vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+map <C-\> :tab<CR>:vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 set term=screen-256color
 
@@ -428,7 +436,7 @@ let g:alternateExtensions_C = "h"
 let g:alternateExtensions_cxx = "h"
 
 " ctags
-let g:auto_ctags_tags_name = '.tags'
+"let g:auto_ctags_tags_name = '.tags'
 
 " https://github.com/junegunn/vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -438,5 +446,42 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 source $HOME/.vim/persisted_options.vim
+
+
+" https://github.com/Amarang/syncfiles/blob/082b4b9e1de144ec87480d0bfe52e9659d0a1748/dotfiles/vimrc#L428-L462
+fu! CoutTokens()
+    " toggles between
+    "    std::cout << " blah1: " << blah1 << " blah2: " << blah2 << " blah3: " << blah3 << std::endl;
+    " and
+    "    blah1 blah2 blah3  
+    "
+    let line=getline('.')
+    " turn into cout statement or reverse, depending on if 
+    " line contains std::cout"
+    let newstr = ""
+    if line =~ "std::cout"
+        let words = split(line," << ")
+        for word in words
+            " if token has these things then it's not a variable by itself
+            if word =~ "std::" || word =~ ": "
+                continue
+            endif
+            let newstr .= word . " "
+        endfor
+    else
+        let words = split(line)
+        let newstr .= "std::cout << "
+        for word in words
+            " if there's a quote in the variable, replace it with single tick
+            let escword = substitute(word, "\"", "'", "g")
+            let newstr .= " \" " . escword . ": \" << " . word . " << "
+        endfor
+        let newstr .= " std::endl;"
+    endif
+    :d
+    :-1put =newstr
+    execute "norm! =="
+endfu
+nnoremap <leader>cp :call g:CoutTokens()<CR>
 
 "eof
