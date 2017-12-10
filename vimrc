@@ -171,9 +171,9 @@ map ,5 :s/^%//<CR><Space>     " latex uncomment
 map ," :s/^/"/<CR><Space>     " vimrc comment
 map ,' :s/^"//<CR><Space>     " vimrc uncomment
 
-noremap <Leader>j J
-noremap K 5<up>
-noremap J 5<down>
+"noremap <Leader>j J
+"noremap K 5<up>
+"noremap J 5<down>
 
 "========="
 " Buffers "
