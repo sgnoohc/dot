@@ -180,7 +180,7 @@ function jarvissetupalias() {
   alias 3wf='cd /home/users/phchang/public_html/phys/FakeRate'
   alias tnp='cd /home/users/phchang/public_html/phys/tnp; export SCRAM_ARCH=slc6_amd64_gcc491; source /cvmfs/cms.cern.ch/cmsset_default.sh; scramv1 project CMSSW CMSSW_7_4_2; cd CMSSW_7_4_2/src; eval `scramv1 runtime -sh`; cd TagAndProbe/Analysis/;'
   alias 3w='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source setup.sh; cd ..; cd rooutil/qframework/; source setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH'
-  alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source setup_cmssw.sh; source setup_stat.sh;'
+  alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source setup.sh; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
   alias tt='tmux attach'
   alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source setup.sh;'
   alias gitone='git --git-dir=.gitone'
@@ -371,7 +371,7 @@ function _createSetupCMS() {
         echo "export SCRAM_ARCH=$2" >> setup_cmssw.sh
     fi
     if [ -z $1 ]; then
-        export CMSSW_VERSION=CMSSW_8_0_18
+        export CMSSW_VERSION=CMSSW_9_2_0
         echo "export CMSSW_VERSION=CMSSW_8_0_18" >> setup_cmssw.sh
     else
         export CMSSW_VERSION=$1
@@ -480,6 +480,19 @@ _screenscomp() {
     COMPREPLY=( $(compgen -W "${screennames}" -- ${COMP_WORDS[COMP_CWORD]}) )
 }
 complete -F _screenscomp sc
+
+function show_and_add_to_clipboard {
+ #   if [ -n "$WINDOW" ]; then
+ #       #echo -e "\033P\033\033]1337;CopyToClipboard=;\aIWANTTOCOPYTHISNOW\033\033]1337;EndCopy\a\033\\" # for screen
+        echo -e "\033Ptmux;\033\033]1337;CopyToClipboard=;\a$@\033\033]1337;EndCopy\a\033\\" # for tmux
+ #   else
+ #       echo -e "\033]1337;CopyToClipboard=;\a$@\033]1337;EndCopy\a" # for normal term
+ #   fi
+}
+
+function pb {
+    show_and_add_to_clipboard $@
+}
 
 
 #------------------------------------------------------------------------

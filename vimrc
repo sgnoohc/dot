@@ -29,6 +29,8 @@ NeoBundle 'Align'
 NeoBundle 'roman/golden-ratio'
 "NeoBundle 'soramugi/auto-ctags.vim'
 NeoBundle 'triglav/vim-visual-increment'
+NeoBundle 'haya14busa/incsearch.vim'
+NeoBundle 'haya14busa/incsearch-fuzzy.vim'
 " Required:
 call neobundle#end()
 " Required:
@@ -483,5 +485,9 @@ fu! CoutTokens()
     execute "norm! =="
 endfu
 nnoremap <leader>cp :call g:CoutTokens()<CR>
+
+map z/ <Plug>(incsearch-fuzzy-/)
+map z? <Plug>(incsearch-fuzzy-?)
+map zg/ <Plug>(incsearch-fuzzy-stay)
 
 "eof
