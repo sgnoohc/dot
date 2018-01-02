@@ -29,6 +29,7 @@ NeoBundle 'Align'
 NeoBundle 'roman/golden-ratio'
 "NeoBundle 'soramugi/auto-ctags.vim'
 NeoBundle 'triglav/vim-visual-increment'
+NeoBundle 'neilagabriel/vim-geeknote'
 " Required:
 call neobundle#end()
 " Required:
@@ -103,6 +104,7 @@ autocmd BufNewFile,BufRead *.vh e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.vhd e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.def set syntax=cfg
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+au BufNewFile,BufFilePre,BufRead *.markdown e ++enc=utf-8
 
 nnoremap <Leader>rw :%s/\s\+$//e<CR>
 vnoremap gw :s![^ ]\zs  \+! !g<CR>
@@ -483,5 +485,13 @@ fu! CoutTokens()
     execute "norm! =="
 endfu
 nnoremap <leader>cp :call g:CoutTokens()<CR>
+
+" Trying as a fix for mac
+set backspace=indent,eol,start
+autocmd FileType markdown match none
+au BufNewFile,BufFilePre,BufRead *.markdown g/^$/d
+au BufNewFile,BufFilePre,BufRead *.markdown imap <Space>  
+
+"let g:GeeknoteFormat="plain"
 
 "eof
