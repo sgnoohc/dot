@@ -497,4 +497,6 @@ autocmd FileType markdown match none
 au BufNewFile,BufFilePre,BufRead *.markdown g/^$/d
 au BufNewFile,BufFilePre,BufRead *.markdown imap <Space>  
 
+abbr ifnm if __name__ == "__main__":
+
 "eof
