@@ -106,6 +106,7 @@ autocmd BufNewFile,BufRead *.vhd e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.def set syntax=cfg
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.markdown e ++enc=utf-8
+au BufNewFile,BufFilePre,BufRead *.markdown set filetype=txt
 
 nnoremap <Leader>rw :%s/\s\+$//e<CR>
 vnoremap gw :s![^ ]\zs  \+! !g<CR>

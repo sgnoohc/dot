@@ -182,6 +182,6 @@ Host sbhp
   ProxyCommand ssh -q sbp nc sbahead 22
 
 Host web
-  ProxyCommand ssh -q uaf-7 nc ucsdweb 22
+  ProxyCommand ssh -q uaf-10 nc ucsdweb 22
 
 #eof
