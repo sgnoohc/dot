@@ -496,7 +496,14 @@ set backspace=indent,eol,start
 autocmd FileType markdown match none
 au BufNewFile,BufFilePre,BufRead *.markdown g/^$/d
 au BufNewFile,BufFilePre,BufRead *.markdown imap <Space>  
+au BufNewFile,BufFilePre,BufRead *.markdown let g:bufferline_echo=0
+au BufNewFile,BufFilePre,BufRead *.markdown execute "normal G"
 
 abbr ifnm if __name__ == "__main__":
+
+" Related to note taking
+nmap <leader>eo :rightbelow vnew<CR>:set cmdheight=4<CR>:e scp://uaf-10//home/users/phchang/public_html/jarvis/note.txt<CR>:set cmdheight=1<CR>
+nmap <leader>er :set cmdheight=4<CR>:bufdo e<CR>:set cmdheight=1<CR>
+nmap <leader>ew :set cmdheight=4<CR>:w<CR>:set cmdheight=1<CR>
 
 "eof
