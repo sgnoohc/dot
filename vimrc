@@ -199,6 +199,7 @@ map ,' :s/^"//<CR><Space>     " vimrc uncomment
 nnoremap <Leader>` :ls<CR>
 nnoremap <Leader>b :bp<CR>
 nnoremap <Leader>f :bn<CR>
+nnoremap <Leader>[ :bw<CR>
 "nnoremap <Leader>d :bd<CR>
 nnoremap <Leader>g :e#<CR>
 nnoremap <Leader>1 :1b<CR>
