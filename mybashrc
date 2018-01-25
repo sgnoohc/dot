@@ -148,6 +148,7 @@ function jarvisbinpath() {
   #export PATH="~/login/bin:$PATH"
   export PATH="~/software/bin:$PATH"
   export PATH="~/syncfiles/pyfiles:$PATH"
+  export PATH="~/dot:$PATH"
   #export PYTHONPATH="$HOME/login/bin/:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
 }
@@ -181,12 +182,13 @@ function jarvissetupalias() {
   alias tnp='cd /home/users/phchang/public_html/phys/tnp; export SCRAM_ARCH=slc6_amd64_gcc491; source /cvmfs/cms.cern.ch/cmsset_default.sh; scramv1 project CMSSW CMSSW_7_4_2; cd CMSSW_7_4_2/src; eval `scramv1 runtime -sh`; cd TagAndProbe/Analysis/;'
   alias 3w='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source setup.sh; cd ..; cd rooutil/qframework/; source setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH'
   alias 3wq='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source setup.sh; cd ..; cd rooutil/qframework/; source setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH; cd qscripts/'
-  alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/; source setuproot.sh; cd dilepbabymaker'
+  alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/; source setuproot.sh; cd dilepbabymaker'
   alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source setup.sh; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
   alias tt='tmux attach'
   alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source setup.sh;'
   alias 3wn='cd /home/users/phchang/public_html/analysis/www/AN/myDir/notes/AN-17-193/trunk'
   alias gitone='git --git-dir=.gitone'
+  alias note='vim /home/users/phchang/public_html/ai/note.txt'
   alias gittwo='git --git-dir=.gittwo'
 #  alias git='/usr/bin/git'
 }
@@ -368,14 +370,14 @@ function _createSetupCMS() {
     echo "source /code/osgcode/cmssoft/cmsset_default.sh  > /dev/null 2>&1" >> setup_cmssw.sh
     if [ -z $2 ]; then
         export SCRAM_ARCH=slc6_amd64_gcc530   # or whatever scram_arch you need for your desired CMSSW release
-        echo "export SCRAM_ARCH=slc6_amd64_gcc530" >> setup_cmssw.sh
+        echo "export SCRAM_ARCH=slc6_amd64_gcc520" >> setup_cmssw.sh
     else
         export SCRAM_ARCH=$2
         echo "export SCRAM_ARCH=$2" >> setup_cmssw.sh
     fi
     if [ -z $1 ]; then
         export CMSSW_VERSION=CMSSW_9_2_0
-        echo "export CMSSW_VERSION=CMSSW_8_0_18" >> setup_cmssw.sh
+        echo "export CMSSW_VERSION=CMSSW_9_2_0" >> setup_cmssw.sh
     else
         export CMSSW_VERSION=$1
         echo "export CMSSW_VERSION=$1" >> setup_cmssw.sh
