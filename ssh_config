@@ -1,6 +1,22 @@
 #  .  custom ssh configuration
 # ..: philip chang, university of illinois
 
+Host uaf-1
+  Hostname uaf-1.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
+Host uaf-4
+  Hostname uaf-4.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
 Host uaf-*
   Hostname %h.t2.ucsd.edu
   User phchang

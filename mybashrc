@@ -146,11 +146,13 @@ function jarvisbinpath() {
   #info "Adding login/scripts to PATH"
 
   #export PATH="~/login/bin:$PATH"
-  export PATH="~/software/bin:$PATH"
-  export PATH="~/syncfiles/pyfiles:$PATH"
-  export PATH="~/dot:$PATH"
+  export PATH="$HOME/software/bin:$PATH"
+  export PATH="$HOME/syncfiles/pyfiles:$PATH"
+  #export PATH="$HOME/dot:$PATH"
   #export PYTHONPATH="$HOME/login/bin/:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
+
+  export LD_LIBRARY_PATH="$HOME/rooutil/:$LD_LIBRARY_PATH"
 }
 
 function jarvissetupalias() {
@@ -170,7 +172,7 @@ function jarvissetupalias() {
   alias tmux='TERM=xterm-256color tmux -2'
   alias tmuxinator='TERM=xterm-256color tmuxinator'
   alias mux='TERM=xterm-256color mux'
-  alias xd='cd ~/public_html/tasutil; source root.sh; cd ProjectMetis/; source setup.sh; cd ..'
+  alias xd='cd ~/public_html/tasutil; source root.sh; cd ProjectMetis/; source ./setup.sh; cd ..'
   alias cp='cp -iv'        # Preferred 'cp' implementation
   alias mv='mv -iv'        # Preferred 'mv' implementation
   alias mkdir='mkdir -pv'  # Preferred 'mkdir' implementation
@@ -180,12 +182,12 @@ function jarvissetupalias() {
   alias 3wl='cd /home/users/phchang/public_html/phys/LeptonBabyMaker; source root.sh'
   alias 3wf='cd /home/users/phchang/public_html/phys/FakeRate; source scripts/setup.sh'
   alias tnp='cd /home/users/phchang/public_html/phys/tnp; export SCRAM_ARCH=slc6_amd64_gcc491; source /cvmfs/cms.cern.ch/cmsset_default.sh; scramv1 project CMSSW CMSSW_7_4_2; cd CMSSW_7_4_2/src; eval `scramv1 runtime -sh`; cd TagAndProbe/Analysis/;'
-  alias 3w='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source setup.sh; cd ..; cd rooutil/qframework/; source setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH'
-  alias 3wq='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source setup.sh; cd ..; cd rooutil/qframework/; source setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH; cd qscripts/'
+  alias 3w='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker_/Loopers; source localsetup.sh; cd ProjectMetis/; source ./setup.sh; cd ..; cd rooutil/qframework/; source ./setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker_/Loopers/rooutil/syncfiles/miscfiles:$PATH'
+  alias 3wq='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source ./setup.sh; cd ..; cd rooutil/qframework/; source ./setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH; cd qscripts/'
   alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/; source setuproot.sh; cd dilepbabymaker'
-  alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source setup.sh; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
+  alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source ./setup.sh; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
   alias tt='tmux attach'
-  alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source setup.sh;'
+  alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source ./setup.sh;'
   alias 3wn='cd /home/users/phchang/public_html/analysis/www/AN/myDir/notes/AN-17-193/trunk'
   alias gitone='git --git-dir=.gitone'
   alias note='vim /home/users/phchang/public_html/ai/note.txt'
@@ -497,6 +499,10 @@ function show_and_add_to_clipboard {
 
 function pb {
     show_and_add_to_clipboard $@
+}
+
+function merror {
+    vim $(msummary -i $1 | grep err | awk '{print $5}')
 }
 
 
