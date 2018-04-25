@@ -179,12 +179,14 @@ function jarvissetupalias() {
   alias phys='source ~/public_html/phys/scripts/setup.sh;'
   alias sweepgitrepos='for dir in $(ls -d *); do echo ""; echo $dir; echo "=========================="; cd $dir; git status -uno 2>/dev/null | grep -E "modified|On\ branch"; cd ../; done'
   alias gsetup='voms-proxy-init -hours 168 -voms cms -rfc'
+  alias lep='cd /home/users/phchang/public_html/analysis/www/code/LepBabyMaker; source setup.sh'
   alias 3wl='cd /home/users/phchang/public_html/phys/LeptonBabyMaker; source root.sh'
-  alias 3wf='cd /home/users/phchang/public_html/phys/FakeRate; source scripts/setup.sh'
+  alias fake='cd /home/users/phchang/public_html/phys/FakeRate; source scripts/setup.sh'
+  alias trig='cd /home/users/phchang/public_html/analysis/www/code/trigeff; source ./setup.sh'
   alias tnp='cd /home/users/phchang/public_html/phys/tnp; export SCRAM_ARCH=slc6_amd64_gcc491; source /cvmfs/cms.cern.ch/cmsset_default.sh; scramv1 project CMSSW CMSSW_7_4_2; cd CMSSW_7_4_2/src; eval `scramv1 runtime -sh`; cd TagAndProbe/Analysis/;'
-  alias 3w='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker_/Loopers; source localsetup.sh; cd ProjectMetis/; source ./setup.sh; cd ..; cd rooutil/qframework/; source ./setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker_/Loopers/rooutil/syncfiles/miscfiles:$PATH'
+  alias 3w='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source localsetup.sh; cd ProjectMetis/; source setup.sh; cd ..; cd rooutil/qframework/; source setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers/rooutil/syncfiles/miscfiles:$PATH'
   alias 3wq='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source ./setup.sh; cd ..; cd rooutil/qframework/; source ./setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH; cd qscripts/'
-  alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/; source setuproot.sh; cd dilepbabymaker'
+  alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/; source setuproot.sh; cd dilepbabymaker; cd ProjectMetis/; source ./setup.sh; cd ../;'
   alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source ./setup.sh; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
   alias tt='tmux attach'
   alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source ./setup.sh;'
@@ -505,6 +507,81 @@ function merror {
     vim $(msummary -i $1 | grep err | awk '{print $5}')
 }
 
+function copy_from_there_to_here {
+    for thing in `ls *`; do cp $1/$thing .; done
+}
+
+function xcp {
+    dest="."
+    if [ $# -gt 1 ]; then
+        dest=$2
+    fi
+    xrdcp root://xrootd.unl.edu/$1 $dest
+}
+export -f xcp
+
+
+function localsetup {
+    source /code/osgcode/cmssoft/cmsset_default.sh  > /dev/null 2>&1
+    export SCRAM_ARCH=slc6_amd64_gcc530
+    export CMSSW_VERSION=CMSSW_9_2_0
+    cd /cvmfs/cms.cern.ch/$SCRAM_ARCH/cms/cmssw/$CMSSW_VERSION/src
+    eval `scramv1 runtime -sh`
+    cd -
+}
+
+human_print(){
+    while read B dummy; do
+        [ $B -lt 1024 ] && echo ${B} bytes && break
+        KB=$(((B+512)/1024))
+        [ $KB -lt 1024 ] && echo ${KB} kilobytes && break
+        MB=$(((KB+512)/1024))
+        [ $MB -lt 1024 ] && echo ${MB} megabytes && break
+        GB=$(((MB+512)/1024))
+        [ $GB -lt 1024 ] && echo ${GB} gigabytes && break
+        echo $(((GB+512)/1024)) terabytes
+    done
+}
+
+human_print_kb(){
+    while read B dummy; do
+        [ $B -lt 1024 ] && echo ${B} kilobytes && break
+        KB=$(((B+512)/1024))
+        [ $KB -lt 1024 ] && echo ${KB} megabytes ${B} && break
+        MB=$(((KB+512)/1024))
+        [ $MB -lt 1024 ] && echo ${MB} gigabytes ${B} && break
+        GB=$(((MB+512)/1024))
+        [ $GB -lt 1024 ] && echo ${GB} terabytes ${B} && break
+        echo $(((GB+512)/1024)) petabytes ${B}
+    done
+}
+
+
+function dusum {
+    if [ $# -eq 0 ]; then
+        echo "USAGE: dusum arg1 arg2 ..."
+    fi
+    du $* | awk '{sum += $1} END {print sum}' | human_print_kb
+}
+
+function jobreport {
+    if [ -z $1 ];then
+        echo "jobreport v1.0.19"
+        exit
+    fi
+    
+    VERSION=$1
+    
+    for JOBFOLDER in $(ls -d ProjectMetis/tasks/*${VERSION} | grep -v MERGE | sort -g); do
+        NEVENTS=$(grep 'Total Events' $(ls $JOBFOLDER/logs/std_logs/*.out) | awk '{sum += $11} END {print sum}')
+        NSKIPPED=$(grep 'loss' $(ls $JOBFOLDER/logs/std_logs/*.out) | awk '{sum += $4} END {print sum}')
+        if [[ $NSKIPPED == "" ]]; then
+            NSKIPPED=0
+        fi
+        PERCENTAGE=$(echo "scale=2; (${NSKIPPED} * 100) / ${NEVENTS}" | bc -l)
+        printf "[%5s%%] %-10s skipped out of %-10s : %-30s\n" "$PERCENTAGE" "${NSKIPPED}" "${NEVENTS}" "$(basename ${JOBFOLDER})"
+    done
+}
 
 #------------------------------------------------------------------------
 #

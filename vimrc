@@ -416,10 +416,10 @@ endfunction
 "nnoremap <Leader>c{ :s/){/)\ {/g<CR>
 
 " Use artistic style
-autocmd BufNewFile,BufRead *.cxx set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
-autocmd BufNewFile,BufRead *.cc set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
-autocmd BufNewFile,BufRead *.C set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
-autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --add-one-line-braces\ --style=allman
+autocmd BufNewFile,BufRead *.cxx set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --style=allman\ --keep-one-line-blocks
+autocmd BufNewFile,BufRead *.cc set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --style=allman\ --keep-one-line-blocks
+autocmd BufNewFile,BufRead *.C set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --style=allman\ --keep-one-line-blocks
+autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --style=allman\ --keep-one-line-blocks
 "autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -s4UHOxgA1pDxbEfxjU
 
 " Add expression under cursor in real time
@@ -501,6 +501,7 @@ au BufNewFile,BufFilePre,BufRead *.markdown let g:bufferline_echo=0
 au BufNewFile,BufFilePre,BufRead *.markdown execute "normal G"
 
 abbr ifnm if __name__ == "__main__":
+abbr fui for (unsigned int i = 0; i < ; ++i)
 
 " Related to note taking
 nmap <leader>eo :rightbelow vnew<CR>:set cmdheight=4<CR>:e scp://uaf-10//home/users/phchang/public_html/jarvis/note.txt<CR>:set cmdheight=1<CR>
