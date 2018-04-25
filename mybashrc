@@ -148,7 +148,7 @@ function jarvisbinpath() {
   #export PATH="~/login/bin:$PATH"
   export PATH="$HOME/software/bin:$PATH"
   export PATH="$HOME/syncfiles/pyfiles:$PATH"
-  #export PATH="$HOME/dot:$PATH"
+  export PATH="$HOME/dot/bin:$PATH"
   #export PYTHONPATH="$HOME/login/bin/:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
 
