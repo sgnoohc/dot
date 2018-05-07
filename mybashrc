@@ -194,6 +194,7 @@ function jarvissetupalias() {
   alias gitone='git --git-dir=.gitone'
   alias note='vim /home/users/phchang/public_html/ai/note.txt'
   alias gittwo='git --git-dir=.gittwo'
+  alias install_rooutil='git clone git@github.com:sgnoohc/rooutil.git rooutil; cd rooutil; git submodule update --init --recursive; source setup.sh; make; cd qframework; make -j 15; source setup.sh; cd ../../;'
 #  alias git='/usr/bin/git'
 }
 
@@ -581,6 +582,16 @@ function jobreport {
         PERCENTAGE=$(echo "scale=2; (${NSKIPPED} * 100) / ${NEVENTS}" | bc -l)
         printf "[%5s%%] %-10s skipped out of %-10s : %-30s\n" "$PERCENTAGE" "${NSKIPPED}" "${NEVENTS}" "$(basename ${JOBFOLDER})"
     done
+}
+
+function lsroot {
+    if [ -z $1 ];then
+        echo "USAGE: lsroot rootfile"
+    fi
+    MACRONAME=$(mktemp stupid_numbers_XXXXXXXXX)
+    MACRO=/tmp/${MACRONAME}.C
+    echo "{ TFile* f = new TFile(\"$1\"); f->ls(); }" > $MACRO
+    root -l -b -q $MACRO
 }
 
 #------------------------------------------------------------------------
