@@ -24,6 +24,7 @@ NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 NeoBundle 'vim-airline/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'vim-scripts/a.vim'
+NeoBundle 'vim-scripts/vis'
 NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'Align'
 NeoBundle 'roman/golden-ratio'
@@ -507,5 +508,8 @@ abbr fui for (unsigned int i = 0; i < ; ++i)
 nmap <leader>eo :rightbelow vnew<CR>:set cmdheight=4<CR>:e scp://uaf-10//home/users/phchang/public_html/jarvis/note.txt<CR>:set cmdheight=1<CR>
 nmap <leader>er :set cmdheight=4<CR>:bufdo e<CR>:set cmdheight=1<CR>
 nmap <leader>ew :set cmdheight=4<CR>:w<CR>:set cmdheight=1<CR>
+
+
+" %!sort -V to sort by filename with number suffixes in correct order
 
 "eof

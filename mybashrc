@@ -149,6 +149,7 @@ function jarvisbinpath() {
   export PATH="$HOME/software/bin:$PATH"
   export PATH="$HOME/syncfiles/pyfiles:$PATH"
   export PATH="$HOME/dot/bin:$PATH"
+  export PYTHONPATH="$HOME/syncfiles/pyfiles:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/bin/:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
 
@@ -186,15 +187,16 @@ function jarvissetupalias() {
   alias tnp='cd /home/users/phchang/public_html/phys/tnp; export SCRAM_ARCH=slc6_amd64_gcc491; source /cvmfs/cms.cern.ch/cmsset_default.sh; scramv1 project CMSSW CMSSW_7_4_2; cd CMSSW_7_4_2/src; eval `scramv1 runtime -sh`; cd TagAndProbe/Analysis/;'
   alias 3w='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source localsetup.sh; cd ProjectMetis/; source setup.sh; cd ..; cd rooutil/qframework/; source setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers/rooutil/syncfiles/miscfiles:$PATH'
   alias 3wq='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source ./setup.sh; cd ..; cd rooutil/qframework/; source ./setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH; cd qscripts/'
-  alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/; source setuproot.sh; cd dilepbabymaker; cd ProjectMetis/; source ./setup.sh; cd ../;'
-  alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source ./setup.sh; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
+  alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMakerProduction/; source setuproot.sh; cd dilepbabymaker; cd ProjectMetis/; source ./setup.sh; cd ../;'
+  alias 3wa='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMakerAnalysis/Loopers/Analysis/WWWAnalysis2016; source ./setup.sh;'
+  alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source ./setup.sh; cd ../../; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
   alias tt='tmux attach'
   alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source ./setup.sh;'
   alias 3wn='cd /home/users/phchang/public_html/analysis/www/AN/myDir/notes/AN-17-193/trunk'
   alias gitone='git --git-dir=.gitone'
   alias note='vim /home/users/phchang/public_html/ai/note.txt'
   alias gittwo='git --git-dir=.gittwo'
-  alias install_rooutil='git clone git@github.com:sgnoohc/rooutil.git rooutil; cd rooutil; git submodule update --init --recursive; source setup.sh; make; cd qframework; make -j 15; source setup.sh; cd ../../;'
+  alias install_rooutil='git clone git@github.com:sgnoohc/rooutil.git rooutil; cd rooutil; git submodule update --init --recursive; source setup.sh; make; cd qframework; export TQPATH=""; make -j 15; source setup.sh; cd ../../; git clone git@github.com:sgnoohc/plottery.git'
 #  alias git='/usr/bin/git'
 }
 
@@ -590,8 +592,28 @@ function lsroot {
     fi
     MACRONAME=$(mktemp stupid_numbers_XXXXXXXXX)
     MACRO=/tmp/${MACRONAME}.C
-    echo "{ TFile* f = new TFile(\"$1\"); f->ls(); }" > $MACRO
-    root -l -b -q $MACRO
+    for item in $*; do
+        echo "{ TFile* f = new TFile(\"$item\"); f->ls(); }" > $MACRO
+        root -l -b -q $MACRO
+    done
+    rm $MACRONAME
+}
+export -f lsroot
+
+function getentriesroot {
+    if [ -z $1 ];then
+        echo "USAGE: getentries rootfile treename"
+    fi
+    MACRONAME=$(mktemp stupid_numbers_XXXXXXXXX)
+    MACRO=/tmp/${MACRONAME}.C
+    echo "{ TFile* f = new TFile(\"$1\"); TTree* t = (TTree*) f->Get(\"$2\"); cout << t->GetEntries() << endl; }" > $MACRO
+    root -l -b -q $MACRO | tail -n1
+    rm $MACRONAME
+}
+export -f lsroot
+
+function tpy {
+    python /home/users/namin/syncfiles/pyfiles/tpy $1
 }
 
 #------------------------------------------------------------------------
