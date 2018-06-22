@@ -616,6 +616,10 @@ function tpy {
     python /home/users/namin/syncfiles/pyfiles/tpy $1
 }
 
+function getlink {
+    echo ${PWD/\/home\/users\/phchang\/public_html/https:\/\/uaf-10.t2.ucsd.edu\/~phchang/}
+}
+
 #------------------------------------------------------------------------
 #
 #
