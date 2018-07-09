@@ -149,6 +149,7 @@ function jarvisbinpath() {
   export PATH="$HOME/software/bin:$PATH"
   export PATH="$HOME/syncfiles/pyfiles:$PATH"
   export PATH="$HOME/dot/bin:$PATH"
+  export PATH="/home/users/phchang/.linuxbrew/bin:$PATH"
   export PYTHONPATH="$HOME/syncfiles/pyfiles:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/bin/:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
@@ -188,7 +189,7 @@ function jarvissetupalias() {
   alias 3w='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source localsetup.sh; cd ProjectMetis/; source setup.sh; cd ..; cd rooutil/qframework/; source setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers/rooutil/syncfiles/miscfiles:$PATH'
   alias 3wq='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source ./setup.sh; cd ..; cd rooutil/qframework/; source ./setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH; cd qscripts/'
   alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMakerProduction/; source setuproot.sh; cd dilepbabymaker; cd ProjectMetis/; source ./setup.sh; cd ../;'
-  alias 3wa='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMakerAnalysis/Loopers/Analysis/WWWAnalysis2016; source ./setup.sh;'
+  alias 3wa='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysis/WWWAnalysis2016_v2; source ./setup.sh;'
   alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source ./setup.sh; cd ../../; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
   alias tt='tmux attach'
   alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source ./setup.sh;'
@@ -406,7 +407,7 @@ function _setupCMS() {
     export SCRAM_ARCH=$2
   fi
   if [ -z $1 ]; then
-    export CMSSW_VERSION=CMSSW_8_0_18
+    export CMSSW_VERSION=CMSSW_9_2_0
   else
     export CMSSW_VERSION=$1
   fi
@@ -617,7 +618,7 @@ function tpy {
 }
 
 function getlink {
-    echo ${PWD/\/home\/users\/phchang\/public_html/https:\/\/uaf-10.t2.ucsd.edu\/~phchang/}
+    echo ${PWD/\/home\/users\/phchang\/public_html/https:\/\/uaf-10.t2.ucsd.edu\/~phchang/}/$1
 }
 
 #------------------------------------------------------------------------
