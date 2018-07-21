@@ -157,6 +157,11 @@ function jarvisbinpath() {
   export LD_LIBRARY_PATH="$HOME/rooutil/:$LD_LIBRARY_PATH"
 }
 
+function www() {
+  w3m -no-graph -dump -cols 72 $1 > test.txt
+  vim test.txt
+}
+
 function jarvissetupalias() {
   #jarvisinfo "Setting up aliases"
   export CLICOLOR=1
