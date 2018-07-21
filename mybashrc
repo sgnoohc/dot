@@ -193,15 +193,17 @@ function jarvissetupalias() {
   alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker2017/; source setuproot.sh; cd dilepbabymaker; source localsetup.sh; cd ProjectMetis/; source ./setup.sh; cd ../;'
   alias 3wav12016='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysis/WWWAnalysis2016_v1; source ./setup.sh;'
   alias 3wav22016='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysis/WWWAnalysis2016_v2; source ./setup.sh;'
-  alias 3wa='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysis/WWWAnalysis2016_v2; source ./setup.sh;'
+  alias 3wa='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysis/WWWAnalysis2017; source ./setup.sh;'
   alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source ./setup.sh; cd ../../; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
   alias tt='tmux attach'
   alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source ./setup.sh;'
   alias 3wn='cd /home/users/phchang/public_html/analysis/www/AN/myDir/notes/AN-17-193/trunk'
+  alias 3wp='cd /home/users/phchang/public_html/analysis/www/AN/myDir/papers/SMP-17-013/trunk'
   alias gitone='git --git-dir=.gitone'
   alias note='vim /home/users/phchang/public_html/ai/note.txt'
   alias gittwo='git --git-dir=.gittwo'
   alias install_rooutil='git clone git@github.com:sgnoohc/rooutil.git rooutil; cd rooutil; git submodule update --init --recursive; source setup.sh; make; cd qframework; export TQPATH=""; make -j 15; source setup.sh; cd ../../; git clone git@github.com:sgnoohc/plottery.git'
+  alias mg5='cd /home/users/phchang/public_html/analysis/mg5; ./MG5_aMC_v2_6_1/bin/mg5_aMC'
 #  alias git='/usr/bin/git'
 }
 
@@ -317,7 +319,7 @@ function jarvisupdate() {
     echo "dot repository needs to pull"
     read -r -p "Are you sure? [y/N] " response
     case "$response" in
-      [yY][eE][sS]|[yY]) 
+      [yY][eE][sS]|[yY])
         /usr/bin/git pull
         ;;
       *)
@@ -328,7 +330,7 @@ function jarvisupdate() {
     echo "dot repository needs to push"
     read -r -p "Are you sure? [y/N] " response
     case "$response" in
-      [yY][eE][sS]|[yY]) 
+      [yY][eE][sS]|[yY])
         /usr/bin/git push
         ;;
       *)
@@ -355,7 +357,7 @@ function _promptcolor(){
     bold=$(tput bold)
     reset=$(tput sgr0)
 
-    PS="\[$bold\]\[$purple\][\D{%r}]\[$reset$blue\] \[$bold\][\u@\h]\[$reset\]"
+    PS="\[$bold\]\[$purple\][\D{%r}]\[$reset$blue\] \[$green\]\[$bold\]<\!> \[$red\]<jobs:\j>\[$reset\] \[$blue\]\[$bold\][\u@\h]\[$reset\]"
     if [ -n "$WINDOW" ]; then
         PS+=" \[\033[01;33m\][${STY##*.}]\[\e[0m\]"
     fi
@@ -593,9 +595,9 @@ function jobreport {
         echo "jobreport v1.0.19"
         exit
     fi
-    
+
     VERSION=$1
-    
+
     for JOBFOLDER in $(ls -d ProjectMetis/tasks/*${VERSION} | grep -v MERGE | sort -g); do
         NEVENTS=$(grep 'Total Events' $(ls $JOBFOLDER/logs/std_logs/*.out) | awk '{sum += $11} END {print sum}')
         NSKIPPED=$(grep 'loss' $(ls $JOBFOLDER/logs/std_logs/*.out) | awk '{sum += $4} END {print sum}')
