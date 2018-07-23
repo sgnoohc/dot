@@ -158,8 +158,10 @@ function jarvisbinpath() {
 }
 
 function www() {
-  w3m -no-graph -dump -cols 72 $1 > test.txt
-  vim test.txt
+  URL=${1}
+  mkdir -p ~/articles
+  w3m -no-graph -dump -cols 72 ${URL} > ~/articles/${URL//\//-}.txt
+  vim ~/articles/${URL//\//-}.txt
 }
 
 function jarvissetupalias() {
