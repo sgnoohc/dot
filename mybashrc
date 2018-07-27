@@ -211,7 +211,7 @@ function jarvissetupalias() {
   alias gittwo='git --git-dir=.gittwo'
   alias install_rooutil='git clone git@github.com:sgnoohc/rooutil.git rooutil; cd rooutil; git submodule update --init --recursive; source setup.sh; make; cd qframework; export TQPATH=""; make -j 15; source setup.sh; cd ../../; git clone git@github.com:sgnoohc/plottery.git'
   alias mg5='cd /home/users/phchang/public_html/analysis/mg5; ./MG5_aMC_v2_6_1/bin/mg5_aMC'
-  alias hww='cd /home/users/phchang/public_html/analysis/highpthiggs source ./setup.sh'
+  alias hww='cd /home/users/phchang/public_html/analysis/highpthiggs; source ./setup.sh; '
 #  alias git='/usr/bin/git'
 }
 
