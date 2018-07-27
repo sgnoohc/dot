@@ -365,7 +365,11 @@ function _promptcolor(){
     bold=$(tput bold)
     reset=$(tput sgr0)
 
-    PS="\[$bold\]\[$purple\][\D{%r}]\[$reset$blue\] \[$green\]\[$bold\]<\!> \[$red\]<jobs:\j>\[$reset\] \[$blue\]\[$bold\][\u@\h]\[$reset\] "
+    if [ "${THISOS}" == "Mac" ]; then
+        PS="\[$bold\]\[$purple\][\D{%r}]\[$reset$blue\] \[$blue\]\[$bold\]<\!> \[$green\]\[$bold\][\u@\h]\[$reset\] "
+    else
+        PS="\[$bold\]\[$purple\][\D{%r}]\[$reset$blue\] \[$green\]\[$bold\]<\!> \[$red\]<jobs:\j>\[$reset\] \[$blue\]\[$bold\][\u@\h]\[$reset\] "
+    fi
     if [ -n "$WINDOW" ]; then
         PS+=" \[\033[01;33m\][${STY##*.}]\[\e[0m\]"
     fi
