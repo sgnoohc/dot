@@ -41,6 +41,11 @@ Host phi
   ForwardX11   yes
   ForwardX11Trusted  yes
 
+host github.com
+  HostName github.com
+  IdentityFile ~/.ssh/id_rsa
+  User git
+
 HOST lxpnew
   User phchang
   HostName lxplus.cern.ch
