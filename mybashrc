@@ -144,10 +144,12 @@ function jarvisbinpath() {
   #info "Adding /usr/local/bin/ to PATH"
   export PATH="/usr/local/bin:$PATH"
   #info "Adding login/scripts to PATH"
+  export PATH="/home/users/phchang/local/bin:$PATH"
 
   #export PATH="~/login/bin:$PATH"
   export PATH="$HOME/software/bin:$PATH"
   export PATH="$HOME/syncfiles/pyfiles:$PATH"
+  export PATH="$HOME/syncfiles/miscfiles:$PATH"
   export PATH="$HOME/dot/bin:$PATH"
   export PATH="/home/users/phchang/.linuxbrew/bin:$PATH"
   export PYTHONPATH="$HOME/syncfiles/pyfiles:$PYTHONPATH"
@@ -155,6 +157,9 @@ function jarvisbinpath() {
   #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
 
   export LD_LIBRARY_PATH="$HOME/rooutil/:$LD_LIBRARY_PATH"
+
+  export myhadoop="/hadoop/cms/store/user/${USER}"
+  export myhadoopdir="/hadoop/cms/store/user/${USER}"
 }
 
 function www() {
@@ -162,6 +167,18 @@ function www() {
   mkdir -p ~/articles
   w3m -no-graph -dump -cols 72 ${URL} > ~/articles/${URL//\//-}.txt
   vim ~/articles/${URL//\//-}.txt
+}
+
+function hdfsck() {
+  path_without_hadoop=${1/\/hadoop/}
+  path_without_double_slash=${path_without_hadoop/\/\//\/}
+  hdfs fsck ${path_without_double_slash}
+}
+
+function hcorrupt() {
+    for thing in `echo $@ | sed 's#/hadoop##g'`; do
+        hdfs fsck $thing | grep "CORRUPT blockpool" | grep "/cms/store" | cut -d ':' -f 1
+    done
 }
 
 function jarvissetupalias() {
@@ -198,11 +215,12 @@ function jarvissetupalias() {
   alias 3wq='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers; source localsetup.sh; cd ProjectMetis/; source ./setup.sh; cd ..; cd rooutil/qframework/; source ./setup.sh; cd ../../; export PYTHONPATH=$PWD:$PYTHONPATH; export PATH=/home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/Loopers/rooutil/syncfiles/miscfiles:$PATH; cd qscripts/'
   alias 3wd2016='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMakerProduction/; source setuproot.sh; cd dilepbabymaker; cd ProjectMetis/; source ./setup.sh; cd ../;'
   alias 3wd='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker2017/; source setuproot.sh; cd dilepbabymaker; source localsetup.sh; cd ProjectMetis/; source ./setup.sh; cd ../;'
+  alias 3wav22016fake='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysis/FakeRate; source ./setup.sh;'
   alias 3wav12016='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysis/WWWAnalysis2016_v1; source ./setup.sh;'
   alias 3wav22016='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysis/WWWAnalysis2016_v2; source ./setup.sh;'
   alias 3wa='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysis/WWWAnalysis2017; source ./setup.sh;'
   alias 3ws='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker__/statistics; source ./setup.sh; cd ../../; cd CMSSW_7_4_7/src/HiggsAnalysis/CombinedLimit'
-  alias tt='tmux attach'
+  alias tt='$HOME/local/bin/tmux attach'
   alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source ./setup.sh;'
   alias 3wn='cd /home/users/phchang/public_html/analysis/www/AN/myDir/notes/AN-17-193/trunk'
   alias 3wp='cd /home/users/phchang/public_html/analysis/www/AN/myDir/papers/SMP-17-013/trunk'
@@ -212,7 +230,18 @@ function jarvissetupalias() {
   alias install_rooutil='git clone git@github.com:sgnoohc/rooutil.git rooutil; cd rooutil; git submodule update --init --recursive; source setup.sh; make; cd qframework; export TQPATH=""; make -j 15; source setup.sh; cd ../../; git clone git@github.com:sgnoohc/plottery.git'
   alias mg5='cd /home/users/phchang/public_html/analysis/mg5; ./MG5_aMC_v2_6_1/bin/mg5_aMC'
   alias hww='cd /home/users/phchang/public_html/analysis/highpthiggs; source ./setup.sh; '
+  alias hwwbaby='cd /home/users/phchang/public_html/analysis/BabyMaker/dilepbabymaker; source ./localsetup.sh; '
+  alias allpfcms4='cd ~/public_html/analysis/ntuplemaker/20180826; source setup.sh; cd /home/users/phchang/public_html/analysis/ntuplemaker/20180826/CMSSW_8_0_26_patch1/src/CMS3/NtupleMaker/test'
+  alias cmssetup='source /cvmfs/cms.cern.ch/cmsset_default.sh'
+  alias cms4='cd /home/users/phchang/public_html/analysis/ntuplemaker/20180826/CMSSW_8_0_26_patch1/src/CMS3/NtupleMaker/test'
+  alias mytop='top -a -u phchang'
+  alias 3wrun2='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysisRun2'
+  alias trigger='cd ~/rooutil/trigger'
 #  alias git='/usr/bin/git'
+}
+
+function lh() {
+    ls -lh -G /hadoop/cms/store/user/phchang/$1
 }
 
 #function jarvisloadcustomfunction() {
@@ -366,9 +395,9 @@ function _promptcolor(){
     reset=$(tput sgr0)
 
     if [ "${THISOS}" == "Mac" ]; then
-        PS="\[$bold\]\[$purple\][\D{%r}]\[$reset$blue\] \[$blue\]\[$bold\]<\!> \[$green\]\[$bold\][\u@\h]\[$reset\] "
+        PS="\[$bold\]\[$purple\][\D{%m/%d %r}]\[$reset$blue\] \[$blue\]\[$bold\]<\!> \[$green\]\[$bold\][\u@\h]\[$reset\] "
     else
-        PS="\[$bold\]\[$purple\][\D{%r}]\[$reset$blue\] \[$green\]\[$bold\]<\!> \[$red\]<jobs:\j>\[$reset\] \[$blue\]\[$bold\][\u@\h]\[$reset\] "
+        PS="\[$bold\]\[$purple\][\D{%m/%d %r}]\[$reset$blue\] \[$green\]\[$bold\]<\!> \[$red\]<jobs:\j>\[$reset\] \[$blue\]\[$bold\][\u@\h]\[$reset\] "
     fi
     if [ -n "$WINDOW" ]; then
         PS+=" \[\033[01;33m\][${STY##*.}]\[\e[0m\]"
@@ -409,7 +438,7 @@ function _createSetupCMS() {
 
     # Environment setting same as my ditto environment
     echo "" > setup_cmssw.sh
-    echo "source /code/osgcode/cmssoft/cmsset_default.sh  > /dev/null 2>&1" >> setup_cmssw.sh
+    echo "source /cvmfs/cms.cern.ch/cmsset_default.sh > /dev/null 2>&1" >> setup_cmssw.sh
     if [ -z $2 ]; then
         export SCRAM_ARCH=slc6_amd64_gcc530   # or whatever scram_arch you need for your desired CMSSW release
         echo "export SCRAM_ARCH=slc6_amd64_gcc520" >> setup_cmssw.sh
@@ -645,15 +674,53 @@ function getentriesroot {
     root -l -b -q $MACRO | tail -n1
     rm $MACRONAME
 }
-export -f lsroot
+export -f getentriesroot
+
+function monitor {
+    for i in $(seq 30000); do clear; $1; read -t 30; done
+}
 
 function tpy {
     python /home/users/namin/syncfiles/pyfiles/tpy $1
 }
 
 function getlink {
-    echo ${PWD/\/home\/users\/phchang\/public_html/https:\/\/uaf-10.t2.ucsd.edu\/~phchang/}/$1
+    echo ${PWD/\/home\/users\/phchang\/public_html/http:\/\/uaf-10.t2.ucsd.edu\/~phchang/}/$1
 }
+
+function merge_every_two_lines {
+    sed 'N;s/\n/ /' $1
+}
+
+function process_metadata_json {
+    grep -A100000000 ijob_to_nevents $1  | grep -A2 ":\ \[" | grep -v "\-\-" | grep -v "\[" | sed 'N;s/\n/ /'  | awk '{sum += $1; wgtsum += $2}END {print sum, wgtsum}'
+}
+export -f process_metadata_json
+
+function get_cluster_ids {
+    condor_q -af ClusterId -nobatch -const 'tag=="'$1'"' | sort | uniq
+}
+export -f get_cluster_ids
+
+function set_desired_sites {
+    condor_qedit $(get_cluster_ids $1) DESIRED_Sites '"'$2'"'
+}
+export -f set_desired_sites
+
+function col {
+if [ $# -lt 1 ]; then
+    echo "usage: col <col #>"
+    return 1
+fi
+num=$1
+
+if [[ $num -lt 0 ]]; then 
+    awk "{print \$(NF+$((num+1)))}"
+else
+    awk -v x=$num '{print $x}'
+fi
+}
+
 
 #------------------------------------------------------------------------
 #

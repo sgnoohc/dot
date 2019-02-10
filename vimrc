@@ -32,6 +32,7 @@ NeoBundle 'roman/golden-ratio'
 NeoBundle 'triglav/vim-visual-increment'
 NeoBundle 'haya14busa/incsearch.vim'
 NeoBundle 'haya14busa/incsearch-fuzzy.vim'
+NeoBundle 'tpope/vim-commentary'
 " Required:
 call neobundle#end()
 " Required:
@@ -511,5 +512,19 @@ nmap <leader>ew :set cmdheight=4<CR>:w<CR>:set cmdheight=1<CR>
 
 
 " %!sort -V to sort by filename with number suffixes in correct order
+
+set undodir=~/.vim/undoinfo/ " where to save undo histories
+set undofile                " Save undos after file closes
+set undolevels=100         " How many undos
+set undoreload=100000        " number of lines to save for undo
+
+nmap zz :tabnew %<CR>
+nmap ZZ :wq<CR>
+
+" vim-commentary
+autocmd FileType c set commentstring=\/\/\ %s
+autocmd FileType cpp set commentstring=\/\/\ %s
+autocmd FileType text set commentstring=\#\ %s
+autocmd FileType crontab set commentstring=\#\ %s
 
 "eof
