@@ -655,6 +655,20 @@ function getlink {
     echo ${PWD/\/home\/users\/phchang\/public_html/https:\/\/uaf-10.t2.ucsd.edu\/~phchang/}/$1
 }
 
+alias mountuaf='sshfs phchang@uaf-10:/home/users/phchang /Users/phchang/sandbox/uaf  -o Compression=no,follow_symlinks,auto_cache,reconnect,defer_permissions,noappledouble'
+alias unmountuaf='sudo umount -f /Users/phchang/sandbox/uaf'
+function svim {
+    FILE=$(_fullpath $1)
+    echo $FILE
+    if [[ ${FILE} == *"sandbox/uaf"* ]]; then
+        UAFPATH=scp://uaf-10//home/users/phchang/${FILE/\/Users\/phchang\/sandbox\/uaf\//}
+        echo ${UAFPATH}
+        cd ~/
+        vim ${UAFPATH}
+        cd -
+    fi
+}
+
 #------------------------------------------------------------------------
 #
 #

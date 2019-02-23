@@ -416,6 +416,6 @@ hi def link cCustomFunc  Function
 hi def link cCustomClass cType
 
 syn keyword     cTransparent    BLOCKTRANSPARENT
-hi def cTransparent gui=bold ctermbg=none ctermfg=none guifg=none guibg=none
+"hi def cTransparent gui=bold ctermbg=none ctermfg=none guifg=none guibg=none
 
 " vim: ts=8
