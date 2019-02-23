@@ -17,6 +17,14 @@ Host uaf-4
   ForwardX11   yes
   ForwardX11Trusted  yes
 
+Host uaf-10
+  Hostname uaf-10.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
 Host uaf-*
   Hostname %h.t2.ucsd.edu
   User phchang
@@ -32,6 +40,11 @@ Host phi
   ForwardAgent yes
   ForwardX11   yes
   ForwardX11Trusted  yes
+
+host github.com
+  HostName github.com
+  IdentityFile ~/.ssh/id_rsa
+  User git
 
 HOST lxpnew
   User phchang
