@@ -178,6 +178,7 @@ function hdfsck() {
   path_without_double_slash=${path_without_hadoop/\/\//\/}
   hdfs fsck ${path_without_double_slash}
 }
+export -f hdfsck
 
 function hcorrupt() {
     for thing in `echo $@ | sed 's#/hadoop##g'`; do
@@ -201,6 +202,7 @@ function jarvissetupalias() {
   alias pd='pushd'
   alias tmux='TERM=xterm-256color tmux -2'
   alias tmuxinator='TERM=xterm-256color tmuxinator'
+  alias yifan='~yxiang/local/bin/wemux'
   alias mux='TERM=xterm-256color mux'
   alias xd='cd ~/public_html/tasutil; source root.sh; cd ProjectMetis/; source ./setup.sh; cd ..'
   alias cp='cp -iv'        # Preferred 'cp' implementation
@@ -228,6 +230,7 @@ function jarvissetupalias() {
   alias 3whj='cd /home/users/phchang/public_html/analysis/www/code/VVVBabyMaker/Loopers; source ./setup.sh;'
   alias 3wn='cd /home/users/phchang/public_html/analysis/www/AN/myDir/notes/AN-17-193/trunk'
   alias 3wp='cd /home/users/phchang/public_html/analysis/www/AN/myDir/papers/SMP-17-013/trunk'
+  alias 3wpgit='cd /home/users/phchang/public_html/analysis/www/paper/SMP-17-013/'
   alias gitone='git --git-dir=.gitone'
   alias note='vim /home/users/phchang/public_html/ai/note.txt'
   alias gittwo='git --git-dir=.gittwo'
@@ -240,8 +243,14 @@ function jarvissetupalias() {
   alias cms4='cd /home/users/phchang/public_html/analysis/ntuplemaker/20180826/CMSSW_8_0_26_patch1/src/CMS3/NtupleMaker/test'
   alias mytop='top -a -u phchang'
   alias 3wrun2='cd /home/users/phchang/public_html/analysis/www/code/WWWAnalysisRun2'
+  alias wwwnfs='cd /nfs-7/userdata/phchang/WWW_babies/'
   alias trigger='cd ~/rooutil/trigger'
 #  alias git='/usr/bin/git'
+  alias wewww='wemux join www; wemux'
+  alias wewvz='wemux join wvz; wemux'
+  alias wesdl='wemux join sdl; wemux'
+  alias webigly='wemux join bigly; wemux'
+  alias hnodes="curl -s http://proxy-1.t2.ucsd.edu:50070/dfshealth.jsp | grep 'Live Nodes' | cut -d ':' -f11 | cut -d '>' -f2 | cut -d '(' -f1"
 }
 
 function lh() {
@@ -694,6 +703,7 @@ function tpy {
 function getlink {
     echo ${PWD/\/home\/users\/phchang\/public_html/http:\/\/uaf-10.t2.ucsd.edu\/~phchang/}/$1
 }
+export -f getlink
 
 function merge_every_two_lines {
     sed 'N;s/\n/ /' $1
@@ -726,6 +736,10 @@ if [[ $num -lt 0 ]]; then
 else
     awk -v x=$num '{print $x}'
 fi
+}
+
+function merge2 {
+    sed '$!N;s/\n/ /' $*
 }
 
 function setup_miniconda {
@@ -764,6 +778,30 @@ function svim {
         cd -
     fi
 }
+
+function condor_col {
+    condor_qedit $USER JobPrio '99999-ProcId'
+}
+
+function get_wemux_command {
+    chmod 777 "/tmp/wemux-phchang-$1"
+    echo "/home/users/phchang/local/bin/tmux -S /tmp/wemux-phchang-$1 -u attach -t $1 -r"
+}
+
+function get_bibitem {
+
+    if [ -z $1 ]; then
+        echo "Usage: sh get_bibitem.sh arXivNumber"
+        exit
+    fi
+
+    BIBTEXURL=$(curl -s "https://inspirehep.net/search?ln=en&p=$1&of=hb&action_search=Search&sf=earliestdate&so=d" | grep "LaTeX(US)")
+    BIBTEXURLTMP1=${BIBTEXURL/'| <a href="https://inspirehep.net/record/'/}
+    BIBTEXURL=${BIBTEXURLTMP1/'/export/hlxu">LaTeX(US)</a>'/}
+    BIBTEXURL=$(echo ${BIBTEXURL} | tr -d ' ') # Don't know why but there is a stupid blank in front
+    curl -s https://inspirehep.net/record/${BIBTEXURL}/export/hlxu | sed -n '/\\cite/,/CITATION/p' | sed 's/<br>/\n/g' | sed 's/&nbsp;/\ /g'
+}
+export -f get_bibitem
 
 #------------------------------------------------------------------------
 #

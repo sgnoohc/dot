@@ -14,9 +14,9 @@ call neobundle#begin(expand('~/.vim/bundle'))
 " Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 " Add or remove your Bundles here:
-NeoBundle 'Shougo/neosnippet.vim'
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'tpope/vim-fugitive'
+" NeoBundle 'Shougo/neosnippet.vim'
+" NeoBundle 'Shougo/neosnippet-snippets'
+" NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'flazz/vim-colorschemes'
 " You can specify revision/branch/tag.
@@ -33,6 +33,10 @@ NeoBundle 'triglav/vim-visual-increment'
 NeoBundle 'haya14busa/incsearch.vim'
 NeoBundle 'haya14busa/incsearch-fuzzy.vim'
 NeoBundle 'tpope/vim-commentary'
+NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'tmhedberg/matchit'
+"NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'majutsushi/tagbar'
 " Required:
 call neobundle#end()
 " Required:
@@ -67,7 +71,7 @@ set hlsearch
 set wildmenu
 set number
 " keep cursor in the middle
-set scrolloff=999
+set scrolloff=20
 " highlight current line
 "set cursorline
 set nocursorcolumn
@@ -106,6 +110,7 @@ autocmd BufNewFile,BufRead *.v e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.vh e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.vhd e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.def set syntax=cfg
+autocmd BufNewFile,BufRead *.cc_ set syntax=c
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.markdown e ++enc=utf-8
 au BufNewFile,BufFilePre,BufRead *.markdown set filetype=txt
@@ -527,4 +532,20 @@ autocmd FileType cpp set commentstring=\/\/\ %s
 autocmd FileType text set commentstring=\#\ %s
 autocmd FileType crontab set commentstring=\#\ %s
 
+nmap <C-k> :TagbarToggle<CR>
+
+fu! GetBibItems()
+    " Retrieve bibitems from inspire from arXiv number (the actual function is implemented in dot/mybashrc
+    let line=getline('.')
+    " turn into cout statement or reverse, depending on if 
+    " line contains std::cout"
+    let newstr = ""
+    let cmd = "get_bibitem " . line
+    let result = system(cmd)
+    :d
+    :-1put =result
+endfu
+nnoremap <leader>cb :call g:GetBibItems()<CR>
+
+" set wrap
 "eof

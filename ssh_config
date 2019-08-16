@@ -9,8 +9,56 @@ Host uaf-1
   ForwardX11   yes
   ForwardX11Trusted  yes
 
+Host uaf-2
+  Hostname uaf-2.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
+Host uaf-3
+  Hostname uaf-3.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
 Host uaf-4
   Hostname uaf-4.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
+Host uaf-5
+  Hostname uaf-5.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
+Host uaf-6
+  Hostname uaf-6.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
+Host uaf-7
+  Hostname uaf-7.t2.ucsd.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
+Host uaf-8
+  Hostname uaf-8.t2.ucsd.edu
   User phchang
   IdentityFile ~/.ssh/id_rsa
   ForwardAgent yes
@@ -25,13 +73,13 @@ Host uaf-10
   ForwardX11   yes
   ForwardX11Trusted  yes
 
-Host uaf-*
-  Hostname %h.t2.ucsd.edu
-  User phchang
-  IdentityFile ~/.ssh/id_rsa
-  ForwardAgent yes
-  ForwardX11   yes
-  ForwardX11Trusted  yes
+# Host uaf-*
+#   Hostname %h.t2.ucsd.edu
+#   User phchang
+#   IdentityFile ~/.ssh/id_rsa
+#   ForwardAgent yes
+#   ForwardX11   yes
+#   ForwardX11Trusted  yes
 
 Host phi
   Hostname phiphi.t2.ucsd.edu
