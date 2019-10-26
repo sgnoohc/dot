@@ -15,4 +15,6 @@ function setdisplay() {
 
 setdisplay
 
+alias slide="cd ~/Google\ Drive/MySlides/2019/8August/"
+
 #eof
