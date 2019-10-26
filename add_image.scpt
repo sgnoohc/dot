@@ -9,6 +9,10 @@ on run argv
         set horizontalOffset to item 4 of argv
         set verticalOffset to item 5 of argv
 
+        if (count of argv) > 5 then
+            set createNewSlide to true
+        end if
+
         tell application "Keynote"
             activate
             if playing is true then tell the front document to stop
@@ -19,7 +23,12 @@ on run argv
                 set the base slide of thisSlide to master slide "Blank" of thisDocument
             else
                 tell front document
-                    set thisSlide to current slide
+                    if createNewSlide is true then
+                        set thisSlide to make new slide with properties ¬
+                            {base slide:master slide "VVV Main"}
+                    else
+                        set thisSlide to current slide
+                    end if
                 end tell
             end if
             my addImageFileToSlideV2(thisSlide, thisImageFile, newImageWidth, newImageHeight, horizontalOffset, verticalOffset)

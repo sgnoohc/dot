@@ -72,6 +72,7 @@ Host uaf-10
   ForwardAgent yes
   ForwardX11   yes
   ForwardX11Trusted  yes
+  Compression yes
 
 # Host uaf-*
 #   Hostname %h.t2.ucsd.edu
