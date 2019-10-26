@@ -1,5 +1,20 @@
 #!/usr/bin/osascript
 
+#
+# Usage:
+#
+#     ./add_image.scpt PATH_TO_PDF IMAGEWIDTH IMAGEHEIGHT HORIZONTALOFFSET VERTICALOFFSET [MAKE_NEW_SLIDE]
+#
+#        ARG1 : PATH_TO_PDF      (e.g. /home/users/me/plot.pdf)
+#        ARG2 : IMAGEWIDTH       (e.g. 400)
+#        ARG3 : IMAGEWIDTH       (e.g. 300)
+#        ARG4 : HORIZONTALOFFSET (e.g. 45)
+#        ARG5 : VERTICALOFFSET   (e.g. 145)
+#        ARG6 : Type anything to set it to true
+#
+#     If the image's desired height and width ratio is not the same as the original image, then whichever is more limiting of the requirement in IMAGEWIDTH or IMAGEHEIGHT will override the setting
+#
+
 on run argv
 
     if (count of argv) > 4 then
