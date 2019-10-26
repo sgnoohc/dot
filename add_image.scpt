@@ -6,14 +6,15 @@
 #
 # Usage:
 #
-#     ./add_image.scpt PATH_TO_PDF IMAGEWIDTH IMAGEHEIGHT HORIZONTALOFFSET VERTICALOFFSET [NEW_SLIDE_MASTER_SLIDE_NAME]
+#     ./add_image.scpt PATH_TO_PDF IMAGEWIDTH IMAGEHEIGHT HORIZONTALOFFSET VERTICALOFFSET [NEW_SLIDE_MASTER_SLIDE_NAME] [TITLE_OF_THE_NEW_SLIDE]
 #
 #        ARG1 : PATH_TO_PDF      (e.g. /home/users/me/plot.pdf)
 #        ARG2 : IMAGEWIDTH       (e.g. 400)
 #        ARG3 : IMAGEHEIGHT      (e.g. 300)
 #        ARG4 : HORIZONTALOFFSET (e.g. 45)
 #        ARG5 : VERTICALOFFSET   (e.g. 145)
-#        ARG6 : Provide the master slide name if wish to create a new slide before adding image
+#        ARG6 (optional): Provide the master slide name if wish to create a new slide before adding image
+#        ARG7 (optional): Title of the new slide
 #
 #     If the image's desired height and width ratio is not the same as the original image, then IMAGEHEIGHT dictates
 #
@@ -34,6 +35,13 @@ on run argv
             set newMasterSlideName to item 6 of argv
         end if
 
+        set setNewSlideTitle to false
+        set newMasterSlideTitle to ""
+        if (count of argv) > 6 then
+            set setNewSlideTitle to true
+            set newMasterSlideTitle to item 7 of argv
+        end if
+
         tell application "Keynote"
             activate
             if playing is true then tell the front document to stop
@@ -47,6 +55,11 @@ on run argv
                     if createNewSlide is true then
                         set thisSlide to make new slide with properties ¬
                             {base slide:master slide newMasterSlideName}
+                        if setNewSlideTitle is true then
+                            tell thisSlide
+                                set the object text of default title item to newMasterSlideTitle
+                            end tell
+                        end if
                     else
                         set thisSlide to current slide
                     end if
