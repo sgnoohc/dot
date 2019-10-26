@@ -10,12 +10,12 @@
 #
 #        ARG1 : PATH_TO_PDF      (e.g. /home/users/me/plot.pdf)
 #        ARG2 : IMAGEWIDTH       (e.g. 400)
-#        ARG3 : IMAGEWIDTH       (e.g. 300)
+#        ARG3 : IMAGEHEIGHT      (e.g. 300)
 #        ARG4 : HORIZONTALOFFSET (e.g. 45)
 #        ARG5 : VERTICALOFFSET   (e.g. 145)
 #        ARG6 : Provide the master slide name if wish to create a new slide before adding image
 #
-#     If the image's desired height and width ratio is not the same as the original image, then whichever is more limiting of the requirement in IMAGEWIDTH or IMAGEHEIGHT will override the setting
+#     If the image's desired height and width ratio is not the same as the original image, then IMAGEHEIGHT dictates
 #
 
 on run argv
