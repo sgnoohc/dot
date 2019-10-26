@@ -73,6 +73,14 @@ Host uaf-10
   ForwardX11   yes
   ForwardX11Trusted  yes
 
+Host bcache-1
+  Hostname bcache-1.t2.ucsd.edu
+  User sjmay
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+
 # Host uaf-*
 #   Hostname %h.t2.ucsd.edu
 #   User phchang

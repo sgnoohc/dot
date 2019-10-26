@@ -71,7 +71,7 @@ set hlsearch
 set wildmenu
 set number
 " keep cursor in the middle
-set scrolloff=20
+set scrolloff=999
 " highlight current line
 "set cursorline
 set nocursorcolumn
@@ -546,6 +546,8 @@ fu! GetBibItems()
     :-1put =result
 endfu
 nnoremap <leader>cb :call g:GetBibItems()<CR>
+
+nnoremap <leader>vv :!/cvmfs/cms.cern.ch/external/tex/texlive/2017/bin/x86_64-linux/pdflatex skeleton.tex<CR><CR>
 
 " set wrap
 "eof

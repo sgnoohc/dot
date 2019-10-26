@@ -164,6 +164,14 @@ function jarvisbinpath() {
 
   export myhadoop="/hadoop/cms/store/user/${USER}"
   export myhadoopdir="/hadoop/cms/store/user/${USER}"
+
+  # Avoid duplicates
+  export HISTCONTROL=ignoredups:erasedups  
+  # When the shell exits, append to the history file instead of overwriting it
+  shopt -s histappend
+  
+  # After each command, append to the history file and reread it
+  export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 }
 
 function www() {
@@ -179,6 +187,28 @@ function hdfsck() {
   hdfs fsck ${path_without_double_slash}
 }
 export -f hdfsck
+
+function copy_backup() {
+  path_without_hadoop=${1/\/hadoop/}
+  path_without_double_slash=${path_without_hadoop/\/\//\/}
+  path_without_hadoop=${path_without_double_slash/\/cms/}
+  path_without_double_slash=${path_without_hadoop/\/\//\/}
+  path_without_hadoop=${path_without_double_slash/\/store/}
+  path_without_double_slash=${path_without_hadoop/\/\//\/}
+  path_without_hadoop=${path_without_double_slash/\/group/}
+  path_without_double_slash=${path_without_hadoop/\/\//\/}
+  path_without_hadoop=${path_without_double_slash/\/snt/}
+  path_without_double_slash=${path_without_hadoop/\/\//\/}
+  path_without_hadoopcmsstoregroupsnt=${path_without_double_slash}
+  FILE=${path_without_hadoopcmsstoregroupsnt}
+  if [ -f "/nfs-7/userdata/phchang/temp_cms4/$FILE" ]; then
+    echo "/nfs-7/userdata/phchang/temp_cms4/$FILE exist"
+  else
+    echo "scp bcache-1:/space/backup/$FILE /nfs-7/userdata/phchang/temp_cms4/$FILE"
+    scp bcache-1:/space/backup/$FILE /nfs-7/userdata/phchang/temp_cms4/$FILE
+  fi
+}
+export -f copy_backup
 
 function hcorrupt() {
     for thing in `echo $@ | sed 's#/hadoop##g'`; do
@@ -249,6 +279,8 @@ function jarvissetupalias() {
   alias wewww='wemux join www; wemux'
   alias wewvz='wemux join wvz; wemux'
   alias wesdl='wemux join sdl; wemux'
+  alias wehww='wemux join hww; wemux'
+  alias wehwh='wemux join hwh; wemux'
   alias webigly='wemux join bigly; wemux'
   alias hnodes="curl -s http://proxy-1.t2.ucsd.edu:50070/dfshealth.jsp | grep 'Live Nodes' | cut -d ':' -f11 | cut -d '>' -f2 | cut -d '(' -f1"
 }
@@ -595,6 +627,7 @@ function copy_from_there_to_here {
 }
 
 function xcp {
+# path should start with /store
     dest="."
     if [ $# -gt 1 ]; then
         dest=$2
@@ -802,6 +835,29 @@ function get_bibitem {
     curl -s https://inspirehep.net/record/${BIBTEXURL}/export/hlxu | sed -n '/\\cite/,/CITATION/p' | sed 's/<br>/\n/g' | sed 's/&nbsp;/\ /g'
 }
 export -f get_bibitem
+
+function tarls {
+    tar tvf $1 | vim -c ':%!sort -n -k3 -r' -
+}
+
+pkldump() {
+   python -c "with open('"$1"','r') as fhin: __import__('pprint').pprint(__import__('pickle').load(fhin)$2)"
+}
+
+npdump() {
+   python -c "data = __import__('numpy').load('"$1"'); print data.shape; print data"
+}
+npzdump() {
+   python -c "data = __import__('numpy').load('"$1"'); print '\n'.join(['-- {}, shape {}\n\t{}'.format(k,data[k].shape,data[k]) for k in data])"
+}
+
+pddump() {
+   python -c "print __import__('pandas').DataFrame(__import__('numpy').load('"$1"')).head()"
+}
+
+print_keynote() {
+    cat $1 | head -n-2 | tail -n+5 | tr -d '|' | sed 's/[^0-9.\ ]*//g' | tr -s ' ' | tr ' ' ','
+}
 
 #------------------------------------------------------------------------
 #
