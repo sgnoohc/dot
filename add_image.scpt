@@ -9,6 +9,7 @@ on run argv
         set horizontalOffset to item 4 of argv
         set verticalOffset to item 5 of argv
 
+        set createNewSlide to false
         if (count of argv) > 5 then
             set createNewSlide to true
         end if
