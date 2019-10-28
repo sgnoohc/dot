@@ -8,7 +8,7 @@
 #        ARG1 : TEXTTOADD        (e.g. "My conclusion of the slide is that this is AWESOME")
 #        ARG2 : HORIZONTALOFFSET (e.g. 45)
 #        ARG3 : VERTICALOFFSET   (e.g. 145)
-#        ARG4 : SIZE   (e.g. 21)
+#        ARG4 : SIZE             (e.g. 21)
 #        ARG5 (optional): Provide the master slide name if wish to create a new slide before adding text
 #        ARG6 (optional): Title of the new slide
 #
