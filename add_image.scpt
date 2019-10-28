@@ -1,9 +1,6 @@
 #!/usr/bin/osascript
 
 #
-# READ ME BEFORE USING
-# There is a hardcoded name of the master slides of keynote when creating new slides
-#
 # Usage:
 #
 #     ./add_image.scpt PATH_TO_PDF IMAGEWIDTH IMAGEHEIGHT HORIZONTALOFFSET VERTICALOFFSET [NEW_SLIDE_MASTER_SLIDE_NAME] [TITLE_OF_THE_NEW_SLIDE]
