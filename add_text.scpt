@@ -8,10 +8,11 @@
 #        ARG1 : TEXTTOADD        (e.g. "My conclusion of the slide is that this is AWESOME")
 #        ARG2 : HORIZONTALOFFSET (e.g. 45)
 #        ARG3 : VERTICALOFFSET   (e.g. 145)
-#        ARG4 (optional): Provide the master slide name if wish to create a new slide before adding image
+#        ARG4 (optional): Provide the master slide name if wish to create a new slide before adding text
 #        ARG5 (optional): Title of the new slide
 #
-#     If the image's desired height and width ratio is not the same as the original image, then IMAGEHEIGHT dictates
+#     The horizontalOffset is the middle point of the textbox
+#     The verticalOffset is the top side of the textbox
 #
 
 on run argv
