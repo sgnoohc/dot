@@ -3,13 +3,14 @@
 #
 # Usage:
 #
-#     ./add_text.scpt TEXTTOADD HORIZONTALOFFSET VERTICALOFFSET [NEW_SLIDE_MASTER_SLIDE_NAME] [TITLE_OF_THE_NEW_SLIDE]
+#     ./add_text.scpt TEXTTOADD HORIZONTALOFFSET VERTICALOFFSET SIZE [NEW_SLIDE_MASTER_SLIDE_NAME] [TITLE_OF_THE_NEW_SLIDE]
 #
 #        ARG1 : TEXTTOADD        (e.g. "My conclusion of the slide is that this is AWESOME")
 #        ARG2 : HORIZONTALOFFSET (e.g. 45)
 #        ARG3 : VERTICALOFFSET   (e.g. 145)
-#        ARG4 (optional): Provide the master slide name if wish to create a new slide before adding text
-#        ARG5 (optional): Title of the new slide
+#        ARG4 : SIZE   (e.g. 21)
+#        ARG5 (optional): Provide the master slide name if wish to create a new slide before adding text
+#        ARG6 (optional): Title of the new slide
 #
 #     The horizontalOffset is the middle point of the textbox
 #     The verticalOffset is the top side of the textbox
@@ -21,19 +22,20 @@ on run argv
         set thisText to item 1 of argv
         set horizontalOffset to item 2 of argv
         set verticalOffset to item 3 of argv
+        set fontSize to item 4 of argv
 
         set createNewSlide to false
         set newMasterSlideName to ""
-        if (count of argv) > 3 then
+        if (count of argv) > 4 then
             set createNewSlide to true
-            set newMasterSlideName to item 4 of argv
+            set newMasterSlideName to item 5 of argv
         end if
 
         set setNewSlideTitle to false
         set newMasterSlideTitle to ""
-        if (count of argv) > 4 then
+        if (count of argv) > 5 then
             set setNewSlideTitle to true
-            set newMasterSlideTitle to item 5 of argv
+            set newMasterSlideTitle to item 6 of argv
         end if
 
         tell application "Keynote"
@@ -59,19 +61,19 @@ on run argv
                     end if
                 end tell
             end if
-            my addTextToSlideV2(thisSlide, thisText, horizontalOffset, verticalOffset)
+            my addTextToSlideV2(thisSlide, thisText, horizontalOffset, verticalOffset, fontSize)
         end tell
     end if
 end run
 
-on addTextToSlideV2(thisSlide, thisText, horizontalOffset, verticalOffset)
+on addTextToSlideV2(thisSlide, thisText, horizontalOffset, verticalOffset, fontSize)
     tell application "Keynote"
         try
             activate
             tell thisSlide
                 set thisTextItem to make new text item with properties {object text:thisText}
                 tell thisTextItem
-                    set the size of its object text to 21
+                    set the size of its object text to fontSize
                     copy its width to horizontalWidth
                     set its position to {horizontalOffset - horizontalWidth / 2, verticalOffset}
                 end tell
