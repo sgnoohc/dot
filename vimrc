@@ -79,6 +79,7 @@ set nowrap
 " tabs are replaced with chracters
 set list
 set listchars=tab:>-
+let mapleader=","
 
 "
 vnoremap . :norm .<cr>
@@ -111,6 +112,7 @@ autocmd BufNewFile,BufRead *.vh e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.vhd e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.def set syntax=cfg
 autocmd BufNewFile,BufRead *.cc_ set syntax=c
+autocmd BufNewFile,BufRead *.tex set wrap
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.markdown e ++enc=utf-8
 au BufNewFile,BufFilePre,BufRead *.markdown set filetype=txt
@@ -161,7 +163,10 @@ nmap <leader>d         :A<CR>
 set incsearch       " shows matches halfway typing a pattern
 set noignorecase          " (no)ignore case in searching
 set hlsearch                " (no)highlight
-nnoremap <silent> <Space> :silent noh<Bar>echo<CR> " Spacebar to clear search
+" nnoremap <silent> <Space> :silent noh<Bar>echo<CR> " Spacebar to clear search
+nnoremap <Space> %
+vnoremap <Space> %
+nnoremap <Leader><Space> :noh<CR>
 
 " Setting a foldmethod to be initiated when I type \zs
 nmap <leader>zs        :set foldmethod=syntax<CR>
@@ -250,7 +255,7 @@ function! InsertTabWrapper()
   if !col || getline('.')[col - 1] !~ '\k'
     return "\<tab>"
   else
-    return "\<c-p>"
+    return "\<c-n>"
   endif
 endfunction
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
@@ -549,5 +554,6 @@ nnoremap <leader>cb :call g:GetBibItems()<CR>
 
 nnoremap <leader>vv :!/cvmfs/cms.cern.ch/external/tex/texlive/2017/bin/x86_64-linux/pdflatex skeleton.tex<CR><CR>
 
+" nmap <C-i> :!./make<CR><CR>
 " set wrap
 "eof

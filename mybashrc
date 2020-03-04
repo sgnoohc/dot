@@ -264,7 +264,7 @@ function jarvissetupalias() {
   alias gitone='git --git-dir=.gitone'
   alias note='vim /home/users/phchang/public_html/ai/note.txt'
   alias gittwo='git --git-dir=.gittwo'
-  alias install_rooutil='git clone git@github.com:sgnoohc/rooutil.git rooutil; cd rooutil; git submodule update --init --recursive; source setup.sh; make; cd qframework; export TQPATH=""; make -j 15; source setup.sh; cd ../../; git clone git@github.com:sgnoohc/plottery.git'
+  alias install_rooutil='git clone --recursive git@github.com:sgnoohc/rooutil.git rooutil; source rooutil/thisrooutil.sh; source rooutil/root.sh'
   alias mg5='cd /home/users/phchang/public_html/analysis/mg5; ./MG5_aMC_v2_6_1/bin/mg5_aMC'
   alias hww='cd /home/users/phchang/public_html/analysis/highpthiggs; source ./setup.sh; '
   alias hwwbaby='cd /home/users/phchang/public_html/analysis/BabyMaker/dilepbabymaker; source ./localsetup.sh; '
@@ -282,6 +282,7 @@ function jarvissetupalias() {
   alias wehww='wemux join hww; wemux'
   alias wehwh='wemux join hwh; wemux'
   alias webigly='wemux join bigly; wemux'
+  alias wesor='wemux join sor; wemux'
   alias hnodes="curl -s http://proxy-1.t2.ucsd.edu:50070/dfshealth.jsp | grep 'Live Nodes' | cut -d ':' -f11 | cut -d '>' -f2 | cut -d '(' -f1"
 }
 
@@ -734,9 +735,14 @@ function tpy {
 }
 
 function getlink {
-    echo ${PWD/\/home\/users\/phchang\/public_html/http:\/\/uaf-10.t2.ucsd.edu\/~phchang/}/$1
+    echo ${PWD/\/home\/users\/phchang\/public_html/http:\/\/snt:tas@uaf-10.t2.ucsd.edu\/~phchang/}/$1
 }
 export -f getlink
+
+function getlinkvvv {
+    echo ${PWD/\/home\/users\/phchang\/public_html/http:\/\/vvv:vvv@uaf-10.t2.ucsd.edu\/~phchang/}/$1
+}
+export -f getlinkvvv
 
 function merge_every_two_lines {
     sed 'N;s/\n/ /' $1
@@ -865,6 +871,29 @@ add_image_to_keynote() {
     else
         $DIR/add_image.scpt $1 400 $2 200 200
     fi
+}
+
+dusage() {
+    cat $1 | grep "./$2*/" | grep -v "./$2.*/"
+}
+
+parsetextable() {
+    sed 's/&/,/g' $1 | sed 's/\$\\pm\$/,/g' | sed 's/\\hline//g' | grep "," | sed 's/\\\\//g' | sed 's/</-999 ,/g' | sed '-es/,/, ±  ,/'{{100..1..2},1} | tr -d '$' | sed 's/[^0-9]*//'| sed 's/,/ , /g'
+}
+
+transpose() {
+
+unset a
+
+while read -a line; do
+    for ((i=0; i < "${#line[@]}"; i++)); do
+        a[$i]="${a[$i]} ${line[$i]}"
+    done
+done < $1
+ 
+for ((i=0; i < ${#a[@]}; i++)); do
+    echo ${a[i]}
+done
 }
 
 #------------------------------------------------------------------------
