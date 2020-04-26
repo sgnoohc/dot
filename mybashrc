@@ -165,13 +165,13 @@ function jarvisbinpath() {
   export myhadoop="/hadoop/cms/store/user/${USER}"
   export myhadoopdir="/hadoop/cms/store/user/${USER}"
 
-  # Avoid duplicates
-  export HISTCONTROL=ignoredups:erasedups  
-  # When the shell exits, append to the history file instead of overwriting it
-  shopt -s histappend
+  # # Avoid duplicates
+  # export HISTCONTROL=ignoredups:erasedups  
+  # # When the shell exits, append to the history file instead of overwriting it
+  # shopt -s histappend
   
-  # After each command, append to the history file and reread it
-  export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+  # # After each command, append to the history file and reread it
+  # export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
 }
 
 function www() {
@@ -229,6 +229,7 @@ function jarvissetupalias() {
     alias ls='ls -hB --group-directories-first --color=auto'
     alias lse='ls -hB --group-directories-first --color=auto --sort=extension'
   fi
+  alias addkey='eval "$(ssh-agent -s)"; ssh-add ~/.ssh/id_rsa'
   alias pd='pushd'
   alias tmux='TERM=xterm-256color tmux -2'
   alias tmuxinator='TERM=xterm-256color tmuxinator'
@@ -281,9 +282,19 @@ function jarvissetupalias() {
   alias wesdl='wemux join sdl; wemux'
   alias wehww='wemux join hww; wemux'
   alias wehwh='wemux join hwh; wemux'
+  alias weweb='wemux join web; wemux'
   alias webigly='wemux join bigly; wemux'
   alias wesor='wemux join sor; wemux'
   alias hnodes="curl -s http://proxy-1.t2.ucsd.edu:50070/dfshealth.jsp | grep 'Live Nodes' | cut -d ':' -f11 | cut -d '>' -f2 | cut -d '(' -f1"
+  # Stolen from Namin
+  alias cond='condor_q $USER'
+  alias conf='condor_q $USER -nobatch'
+  alias cona='condor_q -all'
+  alias cstat='condor_q $USER | col 6 | drop 4 | head -n -2 | stats'
+  alias cstata='condor_q | col 6 | drop 4 | head -n -2 | stats'
+  alias ctail='condor_tail -maxbytes 10000000 -stderr'
+  alias ctailf='condor_tail -maxbytes 10000000 -f '
+  alias stats='~/syncfiles/pyfiles/stats.py'
 }
 
 function lh() {
@@ -637,6 +648,23 @@ function xcp {
 }
 export -f xcp
 
+function xcp_org {
+# path should start with /store
+    dest="${1/\/store\//}"
+    dest=$(dirname $dest)
+    mkdir -p $dest
+    # if [ $# -gt 1 ]; then
+    #     dest=$2
+    # fi
+    xrdcp root://xrootd.unl.edu/$1 $dest
+}
+export -f xcp_org
+
+function simplify_nano_dir {
+    cd $1
+    ln -fs */*/*/*.root .
+    cd -
+}
 
 function localsetup {
     source /code/osgcode/cmssoft/cmsset_default.sh  > /dev/null 2>&1
@@ -762,6 +790,16 @@ function set_desired_sites {
     condor_qedit $(get_cluster_ids $1) DESIRED_Sites '"'$2'"'
 }
 export -f set_desired_sites
+
+function drop {
+# drops the first n lines
+if [ $# -lt 1 ]; then
+    echo "usage: drop <drop #>"
+    return 1
+fi
+n=$1
+tail --lines=+$((n+1))
+}
 
 function col {
 if [ $# -lt 1 ]; then
@@ -896,6 +934,62 @@ for ((i=0; i < ${#a[@]}; i++)); do
 done
 }
 
+function cw {
+    # condor_q $1 -const 'JobStatus==2' -l | grep "^RemoteHost" | rev | cut -d '@' -f1 | rev | cut -d '"' -f1 | cut -d '-' -f1
+    condor_q $USER -const 'JobStatus==2' -af:j MATCH_GLIDEIN_Site
+}
+function csites {
+    condor_q $USER -const 'JobStatus==2' -af MATCH_EXP_JOB_Site | cut -d'@' -f2 | cut -d'"' -f2 | stats
+}
+function csitesi {
+    condor_q $USER -const 'JobStatus==1' -af DESIRED_Sites | stats
+}
+function qeditsites {
+    condor_qedit $USER DESIRED_Sites '"T2_US_Purdue,T2_US_Nebraska,T2_US_UCSD,T2_US_MIT,T2_US_Caltech"'
+}
+function cwh {
+    cw | cut -d'-' -f1 | stats
+}
+
+function daskworkersrelease {
+    condor_release -const 'JobBatchName=="daskworker"'
+}
+
+function daskworkershold {
+    condor_hold -const 'JobBatchName=="daskworker"'
+}
+
+function clog {
+    num=20
+    # if number is less than 10k, then it can't be a condor_id, so
+    # use it as the number of entries to show, otherwise use it
+    # as condor_id
+    if [ $# -gt 0 ]; then 
+        num=$(echo $1 | sed 's/\..*//')
+    fi
+    if  [[ $# -gt 0 && "$num" -gt 10000 ]]; then
+        jobid=$1
+        info=$(condor_history  $jobid -limit 1 -af Iwd Out Err)
+        iwd=$(echo $info | awk '{print $1}')
+        out=$(echo $info | awk '{print $2}')
+        err=$(echo $info | awk '{print $3}')
+        [[ "$out" == "/"* ]] || out=${iwd}/${out}
+        [[ "$err" == "/"* ]] || err=${iwd}/${err}
+        output=$(grep "gsiftp://gftp.t2.ucsd.edu/hadoop/" $out | grep "TRANSFER:EXIT" | sed -s 's|.*gsiftp.*/hadoop|/hadoop|')
+        echo $out
+        echo $err
+        echo $output
+        [ -e "$output" ] && lk $output
+        vim -O $out $err  -c "normal G"
+    else
+        # condor_history $USER -limit 100
+        condor_history $USER -limit $num
+    fi
+}
+
+function condh {
+    condor_q -l $1 | grep -i "hold"
+}
 #------------------------------------------------------------------------
 #
 #

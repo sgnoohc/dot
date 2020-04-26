@@ -113,6 +113,7 @@ autocmd BufNewFile,BufRead *.vhd e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.def set syntax=cfg
 autocmd BufNewFile,BufRead *.cc_ set syntax=c
 autocmd BufNewFile,BufRead *.tex set wrap
+autocmd BufNewFile,BufRead *.md set virtualedit=all
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.markdown e ++enc=utf-8
 au BufNewFile,BufFilePre,BufRead *.markdown set filetype=txt
@@ -428,10 +429,10 @@ endfunction
 "nnoremap <Leader>c{ :s/){/)\ {/g<CR>
 
 " Use artistic style
-autocmd BufNewFile,BufRead *.cxx set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --style=allman\ --keep-one-line-blocks
-autocmd BufNewFile,BufRead *.cc set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --style=allman\ --keep-one-line-blocks
-autocmd BufNewFile,BufRead *.C set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --style=allman\ --keep-one-line-blocks
-autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --remove-braces\ --style=allman\ --keep-one-line-blocks
+autocmd BufNewFile,BufRead *.cxx set formatprg=/home/users/phchang/software/bin/astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --style=allman\ --keep-one-line-blocks\ --indent-switches\ --break-one-line-headers\ --add-braces\ --pad-comma
+autocmd BufNewFile,BufRead *.cc set formatprg=/home/users/phchang/software/bin/astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --style=allman\ --keep-one-line-blocks\ --indent-switches\ --break-one-line-headers\ --add-braces\ --pad-comma
+autocmd BufNewFile,BufRead *.C set formatprg=/home/users/phchang/software/bin/astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --style=allman\ --keep-one-line-blocks\ --indent-switches\ --break-one-line-headers\ --add-braces\ --pad-comma
+autocmd BufNewFile,BufRead *.h set formatprg=/home/users/phchang/software/bin/astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --style=allman\ --keep-one-line-blocks\ --indent-switches\ --break-one-line-headers\ --add-braces\ --pad-comma
 "autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -s4UHOxgA1pDxbEfxjU
 
 " Add expression under cursor in real time
@@ -553,6 +554,20 @@ endfu
 nnoremap <leader>cb :call g:GetBibItems()<CR>
 
 nnoremap <leader>vv :!/cvmfs/cms.cern.ch/external/tex/texlive/2017/bin/x86_64-linux/pdflatex skeleton.tex<CR><CR>
+
+function! Mirror()
+    try
+        let v_save = @v
+        normal! gv"vy
+        let l = split(@v,'\n')
+        call map(l,'join(reverse(split(v:val,"\\ze")),"")')
+        call setreg('v',join(l,"\n"),visualmode())
+        normal! $"vp
+    finally
+        let @v=v_save
+    endtry
+endfunction 
+noremap  <silent> <leader>mr :<c-u>call Mirror()<cr>
 
 " nmap <C-i> :!./make<CR><CR>
 " set wrap
