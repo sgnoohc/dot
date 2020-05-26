@@ -18,6 +18,9 @@ BASHFUNCTIONS="bash"
 #source ~/login/${BASHFUNCTIONS}/greeting.sh
 source ~/dot/history/history.sh
 
+HISTSIZE= 
+HISTFILESIZE=
+
 # === Interface === #
 
 function info() {
@@ -229,7 +232,8 @@ function jarvissetupalias() {
     alias ls='ls -hB --group-directories-first --color=auto'
     alias lse='ls -hB --group-directories-first --color=auto --sort=extension'
   fi
-  alias addkey='eval "$(ssh-agent -s)"; ssh-add ~/.ssh/id_rsa'
+  alias addkey='eval "$(ssh-agent -s)"; ssh-add ~/.ssh/id_rsa_mykey; echo $SSH_AUTH_SOCK > ~/.ssh/mykey; chmod 600 ~/.ssh/mykey'
+  alias setkey='export SSH_AUTH_SOCK=$(cat ~/.ssh/mykey)'
   alias pd='pushd'
   alias tmux='TERM=xterm-256color tmux -2'
   alias tmuxinator='TERM=xterm-256color tmuxinator'
@@ -295,6 +299,7 @@ function jarvissetupalias() {
   alias ctail='condor_tail -maxbytes 10000000 -stderr'
   alias ctailf='condor_tail -maxbytes 10000000 -f '
   alias stats='~/syncfiles/pyfiles/stats.py'
+  alias pandoc_markdown='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html --number-sections'
 }
 
 function lh() {

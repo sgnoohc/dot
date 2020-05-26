@@ -429,11 +429,7 @@ endfunction
 "nnoremap <Leader>c{ :s/){/)\ {/g<CR>
 
 " Use artistic style
-autocmd BufNewFile,BufRead *.cxx set formatprg=/home/users/phchang/software/bin/astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --style=allman\ --keep-one-line-blocks\ --indent-switches\ --break-one-line-headers\ --add-braces\ --pad-comma
-autocmd BufNewFile,BufRead *.cc set formatprg=/home/users/phchang/software/bin/astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --style=allman\ --keep-one-line-blocks\ --indent-switches\ --break-one-line-headers\ --add-braces\ --pad-comma
-autocmd BufNewFile,BufRead *.C set formatprg=/home/users/phchang/software/bin/astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --style=allman\ --keep-one-line-blocks\ --indent-switches\ --break-one-line-headers\ --add-braces\ --pad-comma
-autocmd BufNewFile,BufRead *.h set formatprg=/home/users/phchang/software/bin/astyle\ -U\ --delete-empty-lines\ --pad-oper\ --keep-one-line-blocks\ --pad-header\ --style=allman\ --keep-one-line-blocks\ --indent-switches\ --break-one-line-headers\ --add-braces\ --pad-comma
-"autocmd BufNewFile,BufRead *.h set formatprg=astyle\ -s4UHOxgA1pDxbEfxjU
+autocmd BufNewFile,BufRead *.cc,*.h,*.C,*.cxx set formatprg=clang-format\ -style=\"{BasedOnStyle:\ llvm,\ IndentWidth:\ 4,\ ColumnLimit:\ 100,\ AllowShortIfStatementsOnASingleLine:\ true,\ AllowShortBlocksOnASingleLine:\ false,\ BreakBeforeBraces:\ Allman}\"
 
 " Add expression under cursor in real time
 nnoremap <leader>cc ciW<C-r>=<C-r>"<CR><Esc>
