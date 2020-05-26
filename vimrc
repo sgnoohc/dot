@@ -20,7 +20,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'flazz/vim-colorschemes'
 " You can specify revision/branch/tag.
-NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
+" NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 NeoBundle 'vim-airline/vim-airline'
 NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'vim-scripts/a.vim'
@@ -33,10 +33,10 @@ NeoBundle 'triglav/vim-visual-increment'
 NeoBundle 'haya14busa/incsearch.vim'
 NeoBundle 'haya14busa/incsearch-fuzzy.vim'
 NeoBundle 'tpope/vim-commentary'
-NeoBundle 'airblade/vim-gitgutter'
-NeoBundle 'tmhedberg/matchit'
+" NeoBundle 'airblade/vim-gitgutter'
+" NeoBundle 'tmhedberg/matchit'
 "NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'majutsushi/tagbar'
+" NeoBundle 'majutsushi/tagbar'
 " Required:
 call neobundle#end()
 " Required:

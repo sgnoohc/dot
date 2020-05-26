@@ -1013,8 +1013,8 @@ function condh {
 #------------------------------------------------------------------------
 
 # === detecting systems === #
-#bannercolor
-bannerlite
+bannercolor
+# bannerlite
 jarvisprelim
 jarvisdetectOS
 jarvisbinpath
@@ -1030,7 +1030,7 @@ jarvisphisetup
 # === login items === #
 
 #greeting
-jarviscal
+# jarviscal
 jarvisupdate
 
 #eof
