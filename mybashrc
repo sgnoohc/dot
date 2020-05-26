@@ -1004,6 +1004,15 @@ function clog {
 function condh {
     condor_q -l $1 | grep -i "hold"
 }
+
+function print_scale_factor {
+    root -b -l $1;
+    echo "{"
+    echo "    ${2}->Draw(\"colztexte\");"
+    echo "    c1->SetLogy();"
+    echo "    c1->SaveAs(\"test.pdf\");"
+    echo ""
+}
 #------------------------------------------------------------------------
 #
 #
