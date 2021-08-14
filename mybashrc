@@ -129,7 +129,7 @@ function jarvisdetectOS() {
     #cat ~/login/.hostname | tail -n 4 > ~/login/.hostnamebak
     #'mv' ~/login/.hostnamebak ~/login/.hostname
     echo $HOSTNAME >> ~/dot/.hostname
-    export TERM=xterm-256color
+    # export TERM=xterm-256color
   else
     _promptcolor 33
     export THISOS="Windows"
@@ -155,18 +155,18 @@ function jarvisbinpath() {
 
   #export PATH="~/login/bin:$PATH"
   export PATH="$HOME/software/bin:$PATH"
-  export PATH="$HOME/syncfiles/pyfiles:$PATH"
-  export PATH="$HOME/syncfiles/miscfiles:$PATH"
-  export PATH="$HOME/dot/bin:$PATH"
-  export PATH="/home/users/phchang/.linuxbrew/bin:$PATH"
-  export PYTHONPATH="$HOME/syncfiles/pyfiles:$PYTHONPATH"
+  # export PATH="$HOME/syncfiles/pyfiles:$PATH"
+  # export PATH="$HOME/syncfiles/miscfiles:$PATH"
+  # export PATH="$HOME/dot/bin:$PATH"
+  # export PATH="/home/users/phchang/.linuxbrew/bin:$PATH"
+  #export PYTHONPATH="$HOME/syncfiles/pyfiles:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/bin/:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
 
   export LD_LIBRARY_PATH="$HOME/rooutil/:$LD_LIBRARY_PATH"
 
-  export myhadoop="/hadoop/cms/store/user/${USER}"
-  export myhadoopdir="/hadoop/cms/store/user/${USER}"
+  # export myhadoop="/hadoop/cms/store/user/${USER}"
+  # export myhadoopdir="/hadoop/cms/store/user/${USER}"
 
   # # Avoid duplicates
   # export HISTCONTROL=ignoredups:erasedups  
@@ -270,6 +270,7 @@ function jarvissetupalias() {
   alias note='vim /home/users/phchang/public_html/ai/note.txt'
   alias gittwo='git --git-dir=.gittwo'
   alias install_rooutil='git clone --recursive git@github.com:sgnoohc/rooutil.git rooutil; source rooutil/thisrooutil.sh; source rooutil/root.sh'
+  alias install_nanolooper='git clone --recursive git@github.com:sgnoohc/rooutil.git rooutil; git clone --recursive git@github.com:cmstas/NanoTools.git; source rooutil/thisrooutil.sh; source rooutil/root.sh; cp rooutil/nanolooper_template/* .; make -j'
   alias mg5='cd /home/users/phchang/public_html/analysis/mg5; ./MG5_aMC_v2_6_1/bin/mg5_aMC'
   alias hww='cd /home/users/phchang/public_html/analysis/highpthiggs; source ./setup.sh; '
   alias hwwbaby='cd /home/users/phchang/public_html/analysis/BabyMaker/dilepbabymaker; source ./localsetup.sh; '
@@ -283,12 +284,21 @@ function jarvissetupalias() {
 #  alias git='/usr/bin/git'
   alias wewww='wemux join www; wemux'
   alias wewvz='wemux join wvz; wemux'
+  alias wevvv='wemux join vvv; wemux'
   alias wesdl='wemux join sdl; wemux'
   alias wehww='wemux join hww; wemux'
   alias wehwh='wemux join hwh; wemux'
   alias weweb='wemux join web; wemux'
+  alias weapp='wemux join app; wemux'
   alias webigly='wemux join bigly; wemux'
   alias wesor='wemux join sor; wemux'
+  alias wegen='wemux join gen; wemux'
+  alias wesno='wemux join sno; wemux'
+  alias webdt='wemux join bdt; wemux'
+  alias welhc='wemux join lhc; wemux'
+  alias wedrc='wemux join drc; wemux'
+  alias wemuc='wemux join muc; wemux'
+  alias wecon='wemux join conda; wemux'
   alias hnodes="curl -s http://proxy-1.t2.ucsd.edu:50070/dfshealth.jsp | grep 'Live Nodes' | cut -d ':' -f11 | cut -d '>' -f2 | cut -d '(' -f1"
   # Stolen from Namin
   alias cond='condor_q $USER'
@@ -300,6 +310,7 @@ function jarvissetupalias() {
   alias ctailf='condor_tail -maxbytes 10000000 -f '
   alias stats='~/syncfiles/pyfiles/stats.py'
   alias pandoc_markdown='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html --number-sections'
+  alias pandoc_markdown_nonumber='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html'
 }
 
 function lh() {
@@ -654,14 +665,20 @@ function xcp {
 export -f xcp
 
 function xcp_org {
-# path should start with /store
-    dest="${1/\/store\//}"
+    input=$(echo "$1" | sed 's/^.*\(\/store.*\).*$/\1/')
+    dest="${input/\/store\//}"
     dest=$(dirname $dest)
     mkdir -p $dest
+    echo $dest
     # if [ $# -gt 1 ]; then
     #     dest=$2
     # fi
-    xrdcp root://xrootd.unl.edu/$1 $dest
+    # xrdcp root://xrootd.unl.edu/$input $dest
+    if [[ $input == *"root://"* ]]; then
+        xrdcp $input $dest
+    else
+        xrdcp root://cmsxrootd.fnal.gov/$input $dest
+    fi
 }
 export -f xcp_org
 
@@ -768,7 +785,8 @@ function tpy {
 }
 
 function getlink {
-    echo ${PWD/\/home\/users\/phchang\/public_html/http:\/\/snt:tas@uaf-10.t2.ucsd.edu\/~phchang/}/$1
+    # echo ${PWD/\/home\/users\/phchang\/public_html/http:\/\/snt:tas@uaf-10.t2.ucsd.edu\/~phchang/}/$1
+    echo ${PWD/\/home\/users\/phchang\/public_html/http:\/\/uaf-10.t2.ucsd.edu\/~phchang/}/$1
 }
 export -f getlink
 
@@ -796,6 +814,10 @@ function set_desired_sites {
 }
 export -f set_desired_sites
 
+function remove_idle_jobs {
+    condor_rm -constraint '"JobStatus==1"'
+}
+
 function drop {
 # drops the first n lines
 if [ $# -lt 1 ]; then
@@ -819,6 +841,7 @@ else
     awk -v x=$num '{print $x}'
 fi
 }
+export -f col
 
 function merge2 {
     sed '$!N;s/\n/ /' $*
@@ -1006,13 +1029,124 @@ function condh {
 }
 
 function print_scale_factor {
-    root -b -l $1;
-    echo "{"
-    echo "    ${2}->Draw(\"colztexte\");"
-    echo "    c1->SetLogy();"
-    echo "    c1->SaveAs(\"test.pdf\");"
-    echo ""
+    rm -f .print_scale_factor_temp_script.C
+    echo "{" >> .print_scale_factor_temp_script.C
+    echo "    TFile* file = new TFile(\"${1}\");" >> .print_scale_factor_temp_script.C
+    echo "    TH1F* h = (TH1F*) file->Get(\"${2}\");" >> .print_scale_factor_temp_script.C
+    echo "    ${2}->Draw(\"colztexte\");" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"${1}\" << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"ymax = \" << h->GetYaxis()->GetBinLowEdge(h->GetNbinsY()+1) << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"ymin = \" << h->GetYaxis()->GetBinLowEdge(1) << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"xmax = \" << h->GetXaxis()->GetBinLowEdge(h->GetNbinsX()+1) << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"xmin = \" << h->GetXaxis()->GetBinLowEdge(1) << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    c1->SetLogy();" >> .print_scale_factor_temp_script.C
+    echo "    c1->SaveAs(\"test.pdf\");" >> .print_scale_factor_temp_script.C
+    echo "}" >> .print_scale_factor_temp_script.C
+    root -b -l -q .print_scale_factor_temp_script.C;
 }
+
+function print_scale_factor_x {
+    rm -f .print_scale_factor_temp_script.C
+    echo "{" >> .print_scale_factor_temp_script.C
+    echo "    TFile* file = new TFile(\"${1}\");" >> .print_scale_factor_temp_script.C
+    echo "    TH1F* h = (TH1F*) file->Get(\"${2}\");" >> .print_scale_factor_temp_script.C
+    echo "    ${2}->Draw(\"colztexte\");" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"${1}\" << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"ymax = \" << h->GetYaxis()->GetBinLowEdge(h->GetNbinsY()+1) << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"ymin = \" << h->GetYaxis()->GetBinLowEdge(1) << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"xmax = \" << h->GetXaxis()->GetBinLowEdge(h->GetNbinsX()+1) << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    std::cout << \"xmin = \" << h->GetXaxis()->GetBinLowEdge(1) << std::endl;" >> .print_scale_factor_temp_script.C
+    echo "    c1->SetLogx();" >> .print_scale_factor_temp_script.C
+    echo "    c1->SaveAs(\"test.pdf\");" >> .print_scale_factor_temp_script.C
+    echo "}" >> .print_scale_factor_temp_script.C
+    root -b -l -q .print_scale_factor_temp_script.C;
+}
+
+function retried_sites {
+    if [ -z ${1} ]; then
+        echo "retried_sites WEB_SUMMARY.JSON"
+        exit 
+    fi
+    for ifile in $(msummary -i ${1} | grep retries | awk '{print $5}'); do grep "hostname" ${ifile/.err/.out}; done | sort -g | uniq -c | sort -g
+}
+
+function retried_errors {
+    if [ -z ${1} ]; then
+        echo "retried_errors WEB_SUMMARY.JSON"
+        exit 
+    fi
+    for ifile in $(msummary -i ${1} | grep retries | awk '{print $5}'); do cat ${ifile}; done | sort -g | uniq -c | sort -g
+}
+
+function retried_nano_aods {
+    retried_errors ${1} | grep "/store" | xargs -I{} bash -c 'for i in $(echo "{}"); do echo $i; done'| grep "store/" | sort -g | tr -d ';'
+}
+
+function retried_jobs_nano_aods {
+    if [ -z ${1} ]; then
+        echo "retried_sites WEB_SUMMARY.JSON"
+        exit 
+    fi
+    for ifile in $(msummary -i ${1} | grep retries | awk '{print $5}'); do grep "/store" ${ifile/.err/.out}; done | sort -g | uniq -c | sort -g | xargs -I{} bash -c 'for i in $(echo "{}"); do echo $i; done'| grep "store/" | sort -g | tr -d ';'
+}
+
+function hdur() {
+    echo $@ | sed 's#/hadoop##g' | xargs hadoop fs -du
+}
+
+function jd() {
+    # TriggerOFF
+    echo -e "JobsAreAllDone\rJobs are Done!"
+}
+export -f jd
+
+function install_track_looper() {
+    if [ -z ${1} ]; then
+        echo "install_track_looper TAG"
+    else
+        git clone git@github.com:sgnoohc/TrackLooper.git TrackLooper${1}
+        cd TrackLooper${1}
+        git remote add upstream git@github.com:SegmentLinking/TrackLooper.git
+        git fetch upstream
+    fi
+}
+
+function dq() {
+    if echo x"$1" | grep '*' > /dev/null; then
+        # echo "found asterisk"
+        # dasgoclient -query "dataset=$1"
+        for i in $(dasgoclient -query "dataset=$1"); do
+            dq $i
+        done
+    else
+        NEVENTS=$(dasgoclient -query "file dataset=$1" -json | tr ',' '\n' | grep nevents | tr ':' ' ' | col 2 | awk '{sum += $1} END {print sum}'); echo $1 $NEVENTS;
+    fi
+}
+
+function top_proc()
+{
+    top -c -p "$(pgrep -f ${1} | head -20 | tr "\\n" "," | sed 's/,$//')"
+}
+
+function condor()
+{
+    command=${1}
+    shift
+    if   [[ "${command}" == "q"        ]]; then
+        condor_q $*
+    elif [[ "${command}" == "hold"     ]]; then
+        condor_hold $*
+    elif [[ "${command}" == "userprio" ]]; then
+        condor_userprio $*
+    else
+        type condor
+        echo ""
+        echo "Error: I don't know what 'condor_${command}' is. You need to teach me. Above is my knowledge."
+    fi
+
+}
+export -f condor
+
 #------------------------------------------------------------------------
 #
 #

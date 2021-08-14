@@ -21,8 +21,10 @@ NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'flazz/vim-colorschemes'
 " You can specify revision/branch/tag.
 " NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
-NeoBundle 'vim-airline/vim-airline'
-NeoBundle 'vim-airline/vim-airline-themes'
+NeoBundle 'majutsushi/tagbar'
+NeoBundle 'ap/vim-buftabline'
+" NeoBundle 'vim-airline/vim-airline'
+" NeoBundle 'vim-airline/vim-airline-themes'
 NeoBundle 'vim-scripts/a.vim'
 NeoBundle 'vim-scripts/vis'
 NeoBundle 'junegunn/vim-easy-align'
@@ -33,10 +35,15 @@ NeoBundle 'triglav/vim-visual-increment'
 NeoBundle 'haya14busa/incsearch.vim'
 NeoBundle 'haya14busa/incsearch-fuzzy.vim'
 NeoBundle 'tpope/vim-commentary'
-" NeoBundle 'airblade/vim-gitgutter'
-" NeoBundle 'tmhedberg/matchit'
+NeoBundle 'bling/vim-bufferline'
+NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'tmhedberg/matchit'
 "NeoBundle 'scrooloose/nerdtree'
-" NeoBundle 'majutsushi/tagbar'
+" NeoBundle 'jiangmiao/auto-pairs'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'aminnj/vim-lazytools'
+NeoBundle 'google/vim-searchindex'
+" NeoBundle 'JuliaEditorSupport/julia-vim'
 " Required:
 call neobundle#end()
 " Required:
@@ -71,7 +78,7 @@ set hlsearch
 set wildmenu
 set number
 " keep cursor in the middle
-set scrolloff=999
+set scrolloff=5
 " highlight current line
 "set cursorline
 set nocursorcolumn
@@ -112,6 +119,8 @@ autocmd BufNewFile,BufRead *.vh e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.vhd e ++ff=dos | set tabstop=3 | set syntax=verilog
 autocmd BufNewFile,BufRead *.def set syntax=cfg
 autocmd BufNewFile,BufRead *.cc_ set syntax=c
+autocmd BufNewFile,BufRead *.cu set syntax=c
+autocmd BufNewFile,BufRead *.cuh set syntax=c
 autocmd BufNewFile,BufRead *.tex set wrap
 autocmd BufNewFile,BufRead *.md set virtualedit=all
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
@@ -380,6 +389,8 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tagbar#flags = "f"  " show full tag hierarchy
+let g:airline#extensions#whitespace#max_lines = 100
 
 let g:airline_theme='badwolf'
 "let g:tagbar_ctags_bin='~/software/bin/ctags'
@@ -390,7 +401,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 "map <C-\> :Ctags<CR>:vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 map <C-\> :tab<CR>:vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
-set term=screen-256color
+" set term=screen-256color
 
 "color wombat256mod
 
@@ -429,7 +440,7 @@ endfunction
 "nnoremap <Leader>c{ :s/){/)\ {/g<CR>
 
 " Use artistic style
-autocmd BufNewFile,BufRead *.cc,*.h,*.C,*.cxx set formatprg=clang-format\ -style=\"{BasedOnStyle:\ llvm,\ IndentWidth:\ 4,\ ColumnLimit:\ 100,\ AllowShortIfStatementsOnASingleLine:\ true,\ AllowShortBlocksOnASingleLine:\ false,\ BreakBeforeBraces:\ Allman}\"
+autocmd BufNewFile,BufRead *.cc,*.h,*.C,*.cxx set formatprg=clang-format\ -style=\"{BasedOnStyle:\ llvm,\ IndentWidth:\ 4,\ ColumnLimit:\ 1000,\ AllowShortIfStatementsOnASingleLine:\ true,\ AllowShortBlocksOnASingleLine:\ false,\ BreakBeforeBraces:\ Allman}\"
 
 " Add expression under cursor in real time
 nnoremap <leader>cc ciW<C-r>=<C-r>"<CR><Esc>
@@ -441,13 +452,15 @@ inoremap <C-d> <Del>
 "nnoremap ,/ I//<Esc>  " c/c++ comment
 "nnoremap ,? I<Del><Del><Esc>  " c/c++ uncomment
 
-let g:alternateExtensions_h = "C,c,cpp,cxx,cc,CC"
+let g:alternateExtensions_h = "C,c,cpp,cxx,cc,CC,cu"
 let g:alternateExtensions_H = ""
 let g:alternateExtensions_cpp = "h,hpp"
 let g:alternateExtensions_CPP = "h,hpp"
-let g:alternateExtensions_c = "h"
-let g:alternateExtensions_C = "h"
-let g:alternateExtensions_cxx = "h"
+let g:alternateExtensions_c = "h,cuh"
+let g:alternateExtensions_C = "h,cuh"
+let g:alternateExtensions_cxx = "h,cuh"
+let g:alternateExtensions_cu = "cuh"
+let g:alternateExtensions_cuh = "cu"
 
 " ctags
 "let g:auto_ctags_tags_name = '.tags'
@@ -462,41 +475,42 @@ nmap ga <Plug>(EasyAlign)
 source $HOME/.vim/persisted_options.vim
 
 
-" https://github.com/Amarang/syncfiles/blob/082b4b9e1de144ec87480d0bfe52e9659d0a1748/dotfiles/vimrc#L428-L462
-fu! CoutTokens()
-    " toggles between
-    "    std::cout << " blah1: " << blah1 << " blah2: " << blah2 << " blah3: " << blah3 << std::endl;
-    " and
-    "    blah1 blah2 blah3  
-    "
-    let line=getline('.')
-    " turn into cout statement or reverse, depending on if 
-    " line contains std::cout"
-    let newstr = ""
-    if line =~ "std::cout"
-        let words = split(line," << ")
-        for word in words
-            " if token has these things then it's not a variable by itself
-            if word =~ "std::" || word =~ ": "
-                continue
-            endif
-            let newstr .= word . " "
-        endfor
-    else
-        let words = split(line)
-        let newstr .= "std::cout << "
-        for word in words
-            " if there's a quote in the variable, replace it with single tick
-            let escword = substitute(word, "\"", "'", "g")
-            let newstr .= " \" " . escword . ": \" << " . word . " << "
-        endfor
-        let newstr .= " std::endl;"
-    endif
-    :d
-    :-1put =newstr
-    execute "norm! =="
-endfu
-nnoremap <leader>cp :call g:CoutTokens()<CR>
+autocmd FileType c,cpp,cuda nnoremap <leader>cp :call lazytools#CoutTokens()<CR>
+"" https://github.com/Amarang/syncfiles/blob/082b4b9e1de144ec87480d0bfe52e9659d0a1748/dotfiles/vimrc#L428-L462
+"fu! CoutTokens()
+"    " toggles between
+"    "    std::cout << " blah1: " << blah1 << " blah2: " << blah2 << " blah3: " << blah3 << std::endl;
+"    " and
+"    "    blah1 blah2 blah3  
+"    "
+"    let line=getline('.')
+"    " turn into cout statement or reverse, depending on if 
+"    " line contains std::cout"
+"    let newstr = ""
+"    if line =~ "std::cout"
+"        let words = split(line," << ")
+"        for word in words
+"            " if token has these things then it's not a variable by itself
+"            if word =~ "std::" || word =~ ": "
+"                continue
+"            endif
+"            let newstr .= word . " "
+"        endfor
+"    else
+"        let words = split(line)
+"        let newstr .= "std::cout << "
+"        for word in words
+"            " if there's a quote in the variable, replace it with single tick
+"            let escword = substitute(word, "\"", "'", "g")
+"            let newstr .= " \" " . escword . ": \" << " . word . " << "
+"        endfor
+"        let newstr .= " std::endl;"
+"    endif
+"    :d
+"    :-1put =newstr
+"    execute "norm! =="
+"endfu
+"nnoremap <leader>cp :call g:CoutTokens()<CR>
 
 map z/ <Plug>(incsearch-fuzzy-/)
 map z? <Plug>(incsearch-fuzzy-?)
@@ -530,6 +544,7 @@ nmap ZZ :wq<CR>
 
 " vim-commentary
 autocmd FileType c set commentstring=\/\/\ %s
+autocmd FileType cuda set commentstring=\/\/\ %s
 autocmd FileType cpp set commentstring=\/\/\ %s
 autocmd FileType text set commentstring=\#\ %s
 autocmd FileType crontab set commentstring=\#\ %s
@@ -565,6 +580,24 @@ function! Mirror()
 endfunction 
 noremap  <silent> <leader>mr :<c-u>call Mirror()<cr>
 
+fun! ShowFuncName()
+  let lnum = line(".")
+  let col = col(".")
+  echohl ModeMsg
+  echo getline(search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW'))
+  echohl None
+  call search("\\%" . lnum . "l" . "\\%" . col . "c")
+endfun
+map <leader>sf :call ShowFuncName() <CR>
+
+let g:AutoPairsShortcutFastWrap = '<C-e>'
+
 " nmap <C-i> :!./make<CR><CR>
 " set wrap
+
+set cindent cino=j1,(0,ws,Ws
+
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+
 "eof
