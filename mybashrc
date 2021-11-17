@@ -163,7 +163,7 @@ function jarvisbinpath() {
   #export PYTHONPATH="$HOME/login/bin/:$PYTHONPATH"
   #export PYTHONPATH="$HOME/login/python/:$PYTHONPATH"
 
-  export LD_LIBRARY_PATH="$HOME/rooutil/:$LD_LIBRARY_PATH"
+  export LD_LIBRARY_PATH="$HOME/local/lib:$HOME/rooutil/:$LD_LIBRARY_PATH"
 
   # export myhadoop="/hadoop/cms/store/user/${USER}"
   # export myhadoopdir="/hadoop/cms/store/user/${USER}"

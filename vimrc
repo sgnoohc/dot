@@ -78,7 +78,7 @@ set hlsearch
 set wildmenu
 set number
 " keep cursor in the middle
-set scrolloff=5
+set scrolloff=40
 " highlight current line
 "set cursorline
 set nocursorcolumn
