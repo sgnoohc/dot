@@ -308,7 +308,7 @@ function jarvissetupalias() {
   alias cstata='condor_q | col 6 | drop 4 | head -n -2 | stats'
   alias ctail='condor_tail -maxbytes 10000000 -stderr'
   alias ctailf='condor_tail -maxbytes 10000000 -f '
-  alias stats='~/syncfiles/pyfiles/stats.py'
+  alias stats='~/rooutil/syncfiles/pyfiles/stats.py'
   alias pandoc_markdown='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html --number-sections'
   alias pandoc_markdown_nonumber='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html'
 }
@@ -976,7 +976,7 @@ function cw {
     condor_q $USER -const 'JobStatus==2' -af:j MATCH_GLIDEIN_Site
 }
 function csites {
-    condor_q $USER -const 'JobStatus==2' -af MATCH_EXP_JOB_Site | cut -d'@' -f2 | cut -d'"' -f2 | stats
+    condor_q $USER -const 'JobStatus==2' -af MATCH_EXP_JOBGLIDEIN_ResourceName | cut -d'@' -f2 | cut -d'"' -f2 | stats
 }
 function csitesi {
     condor_q $USER -const 'JobStatus==1' -af DESIRED_Sites | stats

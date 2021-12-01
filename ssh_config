@@ -74,6 +74,15 @@ Host uaf-10
   ForwardX11Trusted  yes
   Compression yes
 
+Host classe
+  Hostname lnx7188.classe.cornell.edu
+  User phchang
+  IdentityFile ~/.ssh/id_rsa
+  ForwardAgent yes
+  ForwardX11   yes
+  ForwardX11Trusted  yes
+  Compression yes
+
 Host bcache-1
   Hostname bcache-1.t2.ucsd.edu
   User sjmay
