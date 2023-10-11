@@ -245,6 +245,8 @@ function jarvissetupalias() {
   alias mkdir='mkdir -pv'  # Preferred 'mkdir' implementation
   alias phys='source ~/public_html/phys/scripts/setup.sh;'
   alias sweepgitrepos='for dir in $(ls -d *); do echo ""; echo $dir; echo "=========================="; cd $dir; git status -uno 2>/dev/null | grep -E "modified|On\ branch"; cd ../; done'
+  alias hpggsetup='source /cvmfs/oasis.opensciencegrid.org/osg-software/osg-wn-client/current/el7-x86_64/setup.sh; export X509_CERT_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates; export X509_VOMS_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/vomsdir; export VOMS_USERCONF=/cvmfs/cms.cern.ch/grid/etc/vomses;'
+  alias hpggsetupel8='source /cvmfs/oasis.opensciencegrid.org/osg-software/osg-wn-client/current/el8-x86_64/setup.sh; export X509_CERT_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates; export X509_VOMS_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/vomsdir; export VOMS_USERCONF=/cvmfs/cms.cern.ch/grid/etc/vomses;'
   alias gsetup='voms-proxy-init -hours 168 -voms cms -rfc'
   alias lep='cd /home/users/phchang/public_html/analysis/www/code/LepBabyMaker; source setup.sh'
   alias 3wl='cd /home/users/phchang/public_html/phys/LeptonBabyMaker; source root.sh'
@@ -313,6 +315,17 @@ function jarvissetupalias() {
   alias pandoc_markdown_nonumber='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html'
 }
 
+function publish() {
+  if [ -z ${1} ]; then
+      echo "Must provide the performance directory"
+      exit
+  fi
+  tar cvzf /tmp/.copy.tar.gz ${1}
+  scp /tmp/.copy.tar.gz uaf-10:~/public_html/hpg
+  ssh uaf-10 'cd ~/public_html/hpg; tar xvzf .copy.tar.gz'
+}
+export -f publish
+
 function lh() {
     ls -lh -G /hadoop/cms/store/user/phchang/$1
 }
@@ -345,7 +358,8 @@ function jarvisbasheditorset() {
 
 function jarvistimezone() {
   #jarvisinfo "Stting time zone to America/Chicago"
-  export TZ="/usr/share/zoneinfo/America/Los_Angeles"
+  # export TZ="/usr/share/zoneinfo/America/Los_Angeles"
+  export TZ="/usr/share/zoneinfo/America/New_York"
   #export TZ="/usr/share/zoneinfo/Europe/Paris"
 }
 
@@ -1146,6 +1160,16 @@ function condor()
 
 }
 export -f condor
+
+function dump()
+{
+    command=${1}
+    tar czf /tmp/tmp.tar.gz ${1}
+    scp -r /tmp/tmp.tar.gz uaf-10:~/public_html/dump/hpg/
+    ssh uaf-10 "cd ~/public_html/dump/hpg; tar xzf tmp.tar.gz; rm tmp.tar.gz"
+
+}
+export -f dump
 
 #------------------------------------------------------------------------
 #
