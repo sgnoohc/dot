@@ -175,6 +175,10 @@ function jarvisbinpath() {
   
   # # After each command, append to the history file and reread it
   # export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+  if [[ "${THISOS}" == "Mac" ]]; then
+    export PATH="/opt/local/bin:$PATH"
+    export PATH="/opt/homebrew/bin:$PATH"
+  fi
 }
 
 function www() {
@@ -311,6 +315,10 @@ function jarvissetupalias() {
   alias stats='~/rooutil/syncfiles/pyfiles/stats.py'
   alias pandoc_markdown='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html --number-sections'
   alias pandoc_markdown_nonumber='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html'
+  alias addmargin="pdf-crop-margins -u -a4 0 0 -200 0"
+  alias tohpg='ssh -t hpg "ssh -t login12 \"module load tmux; tmux attach -d\""'
+  alias tolst='ssh -t hpg "ssh -t login12 \"module load tmux; tmux attach -d\""'
+  alias touaf='ssh -t uaf-2 "jv; tmux attach -d"'
 }
 
 function lh() {

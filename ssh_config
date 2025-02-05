@@ -91,6 +91,22 @@ Host bcache-1
   ForwardX11   yes
   ForwardX11Trusted  yes
 
+Host hpg2
+  Hostname hpg2.rc.ufl.edu
+  User p.chang
+  Port 2222
+  ControlPath ~/.ssh/cm-%r@%l-%h:%p
+  ControlMaster auto
+  ControlPersist 24h
+
+Host hpg
+  Hostname hpg.rc.ufl.edu
+  User p.chang
+  Port 2222
+  ControlPath ~/.ssh/cm-%r@%l-%h:%p
+  ControlMaster auto
+  ControlPersist 24h
+
 # Host uaf-*
 #   Hostname %h.t2.ucsd.edu
 #   User phchang
@@ -108,6 +124,8 @@ Host phi
   ForwardX11Trusted  yes
 
 host github.com
+  AddKeysToAgent yes
+  UseKeychain yes
   HostName github.com
   IdentityFile ~/.ssh/id_rsa
   User git

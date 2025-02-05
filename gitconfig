@@ -6,3 +6,5 @@
 	name = Philip Chang
 	email = philip@ucsd.edu
 	github = sgnoohc
+[url "git@github.com:"]
+	insteadOf = https://github.com/

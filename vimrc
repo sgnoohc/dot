@@ -133,7 +133,7 @@ vnoremap gw :s![^ ]\zs  \+! !g<CR>
 "set formatoptions=
 
 "set mouse=a                     "Set mouse active in iTerm (MacOSX?anyone?)
-"set autoindent
+" set autoindent
 "set smartindent
 "set cursorline                  "Current cursorline option
 "set textwidth=79                " break lines when line length increases
@@ -600,4 +600,5 @@ set cindent cino=j1,(0,ws,Ws
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 
+nmap <Leader>w :w<CR>:!make<CR><CR>:!open main.pdf<CR><CR>
 "eof
