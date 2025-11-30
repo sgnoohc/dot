@@ -36,3 +36,7 @@ esac
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
+
+source /Users/phchang/miniconda3/etc/profile.d/conda.sh
+export SPACK_INSTALL_DIR=/Users/phchang/Software
+source ${SPACK_INSTALL_DIR}/spack/share/spack/setup-env.sh

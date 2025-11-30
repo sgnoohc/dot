@@ -123,6 +123,12 @@ Host phi
   ForwardX11   yes
   ForwardX11Trusted  yes
 
+Host github-kbcgweb
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+
 host github.com
   AddKeysToAgent yes
   UseKeychain yes
@@ -207,6 +213,11 @@ Host cmslpc*.fnal.gov
   GSSAPIDelegateCredentials yes
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
+
+  #Host flexam
+  #  HostName flexam.phys.ufl.edu
+  #  User p.chang
+  #  ProxyJump p.chang@hpg.rc.ufl.edu
 
 # University of Cincinnati
 Host earth
