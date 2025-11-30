@@ -183,7 +183,7 @@
     "BSTSnapAreaDefaultShowPictogram" : false,
     "BSTSnapAreaDefaultPictoDistanceFromBottom" : 0.10000000000000001
   },
-  "BTTPresetUUID" : "2D82FB15-DF39-41A5-B1AC-7966D5988A30",
+  "BTTPresetUUID" : "ABBB2703-A4DC-48FC-A54E-EDE0F6238A10",
   "BTTPresetContent" : [
     {
       "BTTAppBundleIdentifier" : "com.apple.Terminal",
