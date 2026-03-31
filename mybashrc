@@ -150,6 +150,7 @@ function jarvisbinpath() {
   #jarvisinfo "Adding PATH env"
   #info "Adding /usr/local/bin/ to PATH"
   export PATH="/usr/local/bin:$PATH"
+  export PATH="~/.local/bin:$PATH"
   #info "Adding login/scripts to PATH"
   export PATH="/home/users/phchang/local/bin:$PATH"
 
@@ -1180,6 +1181,19 @@ function dump()
 
 }
 export -f dump
+
+jpegcap () {
+  if [ $# -lt 1 ]; then
+    echo "Usage: jpegcap input.jpg [output.jpg]"
+    return 1
+  fi
+
+  infile="$1"
+  outfile="${2:-small_$1}"
+
+  magick "$infile" -resize 2000x2000\> -define jpeg:extent=800KB "$outfile"
+}
+export -f jpegcap
 
 #------------------------------------------------------------------------
 #
