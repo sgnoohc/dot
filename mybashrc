@@ -1,12 +1,10 @@
-#=============================================================================#
-#  .                                                                          #
-# ..: philip.chang, university of california san diego, physics dept.         #
-#                                                                             #
-#                  _______ _______  ______ _     _      _____                 #
-#                  |  |  | |_____| |_____/ |____/         |                   #
-#                  |  |  | |     | |    \_ |    \_      __|__                 #
-#                                                                             #
-#=============================================================================#
+#╭─────────────────────────────────────────────────────────────────────────────╮
+#│                                                                             │
+#│     _       _____  ______  _____     philip.chang                           │
+#│     |      |     | |_____/   |      university of florida · physics         │
+#│     |_____ |_____| |    \_ __|__                                            │
+#│                                                                             │
+#╰─────────────────────────────────────────────────────────────────────────────╯
 
 # source global definitions
 if [ -f /etc/bashrc ]; then
@@ -27,59 +25,153 @@ function info() {
   echo "..:                ""$1"
 }
 
-function jarvisinfo() {
-  echo "..: J.A.R.V.I.S. : ""$1"
+function loriinfo() {
+  echo "..: L.O.R.I. :     ""$1"
+}
+
+function _lori_line() {
+  local content="$1"
+  local w=$(printf '%s' "$content" | wc -L)
+  local pad=$((76 - w))
+  [[ $pad -lt 0 ]] && pad=0
+  printf "│ %s%*s│\n" "$content" "$pad" ""
 }
 
 function banner() {
-  echo "#=============================================================================#"
-  echo "#  .                                                                          #"
-  echo "# ..: philip.chang, university of california san diego, physics dept.         #"
-  echo "#                                                                             #"
-  echo "#                  _______ _______  ______ _     _      _____                 #"
-  echo "#                  |  |  | |_____| |_____/ |____/         |                   #"
-  echo "#                  |  |  | |     | |    \_ |    \_      __|__                 #"
-  echo "#                                                                             #"
-  echo "#=============================================================================#"
+  local today=$(date '+%a, %b %d, %Y')
+  echo "╭─────────────────────────────────────────────────────────────────────────────╮"
+  _lori_line ""
+  _lori_line "     _       _____  ______  _____     philip.chang"
+  _lori_line "     |      |     | |_____/   |      university of florida · physics"
+  _lori_line "     |_____ |_____| |    \_ __|__    ${today}"
+  _lori_line ""
+  _lori_line "  ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──"
+  _lori_line ""
+  echo "╰─────────────────────────────────────────────────────────────────────────────╯"
 }
 
 function bannercolor() {
-  echo -e "#=============================================================================#"
-  echo -e "#  .                                                                          #"
-  echo -e "# ..: philip.chang, university of california san diego, physics dept.         #"
-  echo -e "#                                                                             #"
-  echo -e "#                  \033[1;31m_______ _______  ______ _     _      ______                \033[0m#"
-  echo -e "#                  \033[1;33m|  |  | |\033[31m_____\033[1;33m| |\033[31m_____/ \033[1;33m|\033[31m____/        \033[1;33m|  |\033[0m                 #"
-  echo -e "#                  \033[1;33m|  |  | |     | |    \033[31m\_ \033[1;33m|    \033[31m\_      _\033[1;33m|\033[31m__\033[1;33m|\033[31m_                \033[0m#"
-  echo -e "#                                                                             #"
-  echo -e "#=============================================================================#"
+  local B=$'\033[38;5;108m'   # Sage green (border)
+  local O=$'\033[38;5;179m'   # Warm gold (LORI art)
+  local W=$'\033[1;37m'       # White/bright (name/uni)
+  local D=$'\033[38;5;252m'   # Light gray (separator, sysinfo)
+  local I=$'\033[3;38;5;252m' # Italic/light (quote)
+  local R=$'\033[0m'          # Reset
+
+  # Dynamic content
+  local today=$(date '+%a, %b %d, %Y')
+  local host=$(hostname -s)
+  local up=$(uptime -p 2>/dev/null | sed 's/^up //')
+  local weather=$(curl -s --max-time 2 "wttr.in/?format=%c+%t" 2>/dev/null)
+  [[ "$weather" == *"Unknown"* || -z "$weather" || "$weather" == *"<!DOCTYPE"* ]] && weather=""
+
+  # Build system info line
+  local sysinfo="${host}"
+  [[ -n "$up" ]] && sysinfo="${sysinfo} · up ${up}"
+  [[ -n "$weather" ]] && sysinfo="${sysinfo} · ${weather}"
+
+  # Quote
+  local qtext="" qattr=""
+  if command -v fortune &>/dev/null; then
+    qtext=$(fortune -s 2>/dev/null | tr '\n' ' ' | sed 's/  */ /g;s/^ *//;s/ *$//')
+  fi
+  if [[ -z "$qtext" ]]; then
+    local quotes=(
+      "The cosmos is within us. We are made of star-stuff.|Carl Sagan"
+      "I have no special talents. I am only passionately curious.|Albert Einstein"
+      "Nothing in life is to be feared, it is only to be understood.|Marie Curie"
+      "The important thing is not to stop questioning.|Albert Einstein"
+      "Somewhere, something incredible is waiting to be known.|Carl Sagan"
+      "Science is a way of thinking much more than it is a body of knowledge.|Carl Sagan"
+      "The good thing about science is that it's true whether or not you believe in it.|Neil deGrasse Tyson"
+      "If I have seen further it is by standing on the shoulders of giants.|Isaac Newton"
+      "We are just an advanced breed of monkeys on a minor planet of a very average star.|Stephen Hawking"
+      "Physics is like sex: sure, it may give some practical results, but that's not why we do it.|Richard Feynman"
+      "Imagination is more important than knowledge.|Albert Einstein"
+      "The universe is under no obligation to make sense to you.|Neil deGrasse Tyson"
+      "In the middle of difficulty lies opportunity.|Albert Einstein"
+      "One, remember to look up at the stars and not down at your feet.|Stephen Hawking"
+      "Not only is the universe stranger than we imagine, it is stranger than we can imagine.|J.B.S. Haldane"
+    )
+    local pick="${quotes[$((RANDOM % ${#quotes[@]}))]}"
+    qtext="${pick%%|*}"
+    qattr="${pick##*|}"
+  fi
+  [[ ${#qtext} -gt 70 ]] && qtext="${qtext:0:67}..."
+
+  # Helper: print a bordered line, padded to 77 visible inner chars
+  # $1=visible text (for width calc), $2=colored text (optional, defaults to $1)
+  _bc_line() {
+    local vis="$1" col="${2:-$1}"
+    local w=$(printf '%s' "$vis" | wc -L)
+    local pad=$((76 - w))
+    [[ $pad -lt 0 ]] && pad=0
+    printf "%s %s%*s%s\n" "${B}│${R}" "$col" "$pad" "" "${B}│${R}"
+  }
+
+  # ASCII art pieces (each 30 chars)
+  local a1=" _       _____  ______  _____ "
+  local a2=" |      |     | |_____/   |   "
+  local a3=" |_____ |_____| |    \_ __|__ "
+
+  # Right-side info
+  local r1="philip.chang"
+  local r2="university of florida · physics"
+  local r3="$today"
+
+  # Top border
+  printf "%s\n" "${B}╭─────────────────────────────────────────────────────────────────────────────╮${R}"
+
+  _bc_line ""
+  _bc_line "    ${a1}    ${r1}" "    ${O}${a1}${R}    ${W}${r1}${R}"
+  _bc_line "    ${a2}    ${r2}" "    ${O}${a2}${R}    ${W}${r2}${R}"
+  _bc_line "    ${a3}    ${r3}" "    ${O}${a3}${R}    ${W}${r3}${R}"
+  _bc_line ""
+
+  local sep="  ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ──"
+  _bc_line "$sep" "${D}${sep}${R}"
+
+  _bc_line ""
+  _bc_line "  ${sysinfo}" "  ${D}${sysinfo}${R}"
+  _bc_line ""
+
+  if [[ -n "$qattr" ]]; then
+    local qline="  \"${qtext}\""
+    _bc_line "$qline" "  ${I}\"${qtext}\"${R}"
+    local attr_vis="— ${qattr}"
+    local attr_pad=$((74 - ${#attr_vis}))
+    [[ $attr_pad -lt 0 ]] && attr_pad=0
+    local attr_spaces=$(printf '%*s' "$attr_pad" '')
+    _bc_line "${attr_spaces}${attr_vis}" "${attr_spaces}${I}${attr_vis}${R}"
+  elif [[ -n "$qtext" ]]; then
+    local qline="  ${qtext}"
+    _bc_line "$qline" "  ${I}${qtext}${R}"
+  fi
+
+  _bc_line ""
+  printf "%s\n" "${B}╰─────────────────────────────────────────────────────────────────────────────╯${R}"
+
+  unset -f _bc_line
 }
 
 function bannerlite() {
-#  echo -e "#=============================================================================#"
   echo -e " ."
-  info "philip.chang, university of california san diego, physics dept."
+  info "philip.chang, university of florida, physics dept."
   info ""
-#  echo -e "#                                                                             #"
-#  echo -e "#                  \033[1;31m_______ _______  ______ _     _      _____                 \033[0m#"
-#  echo -e "#                  \033[1;33m|  |  | |\033[31m_____\033[1;33m| |\033[31m_____/ \033[1;33m|\033[31m____/         \033[1;33m|\033[0m                   #"
-#  echo -e "#                  \033[1;33m|  |  | |     | |    \033[31m\_ \033[1;33m|    \033[31m\_      __\033[1;33m|\033[31m__                 \033[0m#"
-#  echo -e "#                                                                             #"
-#  echo -e "#=============================================================================#"
 }
 
-function jarvishelp() {
-  jarvisinfo "Sir, you're memory seems to be fading."
-  jarvisinfo "I recommend exercising terminal more often."
-  jarvisinfo "Here are the list of custom functions ..."
-  jarvisinfo "You can also see this by 'typeset -F'"
-  jarvisinfo "Press enter to see the list ..."
+function lorihelp() {
+  loriinfo "Sir, your memory seems to be fading."
+  loriinfo "I recommend exercising terminal more often."
+  loriinfo "Here are the list of custom functions ..."
+  loriinfo "You can also see this by 'typeset -F'"
+  loriinfo "Press enter to see the list ..."
   read dummy
   typeset -F | grep "_" | grep -v "hpx" | grep -v "cern" | awk '{print $3}'
 }
 
-function jarviscal() {
-  #jarvisinfo "Current time and date is $(echo `date`)"
+function lorical() {
+  #loriinfo "Current time and date is $(echo `date`)"
   info "Current time and date is $(echo `date`)"
   if [[ "${THISOS}" == "Mac" ]]; then
     CALOUTPUT="/tmp/cal.out"
@@ -96,9 +188,9 @@ function jarviscal() {
   done
 }
 
-#function jarvistodo() {
+#function loritodo() {
 #  info ""
-#  jarvisinfo "Here are your TODO lists ..."
+#  loriinfo "Here are your TODO lists ..."
 #  export TODO="$HOME/login/todo.txt"
 #  NTODOS=$(badoop | wc -l)
 #  info ""
@@ -112,8 +204,8 @@ function jarviscal() {
 #  info ""
 #}
 
-function jarvisdetectOS() {
-  #jarvisinfo "Detecting OS environment ..."
+function loridetectOS() {
+  #loriinfo "Detecting OS environment ..."
   if [ "$(uname)" == "Darwin" ]; then
     #info "Detected Mac OS X operating system!"
     _promptcolor 38
@@ -136,8 +228,8 @@ function jarvisdetectOS() {
   fi
 }
 
-function jarvisprelim() {
-  #jarvisinfo "System starting ..."
+function loriprelim() {
+  #loriinfo "System starting ..."
   #info "Setting up global definitions ..."
 
   #info "Disabling ctrl-d"
@@ -146,8 +238,8 @@ function jarvisprelim() {
   export PROMPT_COMMAND='history -a'
 }
 
-function jarvisbinpath() {
-  #jarvisinfo "Adding PATH env"
+function loribinpath() {
+  #loriinfo "Adding PATH env"
   #info "Adding /usr/local/bin/ to PATH"
   export PATH="/usr/local/bin:$PATH"
   export PATH="~/.local/bin:$PATH"
@@ -176,12 +268,6 @@ function jarvisbinpath() {
   
   # # After each command, append to the history file and reread it
   # export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
-  if [[ "${THISOS}" == "Mac" ]]; then
-    export PATH="/opt/local/bin:$PATH"
-    export PATH="/opt/homebrew/bin:$PATH"
-    export PATH="/opt/homebrew/bin:$PATH"
-    export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-  fi
 }
 
 function www() {
@@ -226,8 +312,8 @@ function hcorrupt() {
     done
 }
 
-function jarvissetupalias() {
-  #jarvisinfo "Setting up aliases"
+function lorisetupalias() {
+  #loriinfo "Setting up aliases"
   export CLICOLOR=1
   if [ "${THISOS}" == "Mac" ]; then
     alias ls='ls -h -G'
@@ -244,6 +330,7 @@ function jarvissetupalias() {
   alias pd='pushd'
   alias tmux='TERM=xterm-256color tmux -2'
   alias tmuxinator='TERM=xterm-256color tmuxinator'
+  alias ta='tmux new-session -t 0'
   alias yifan='~yxiang/local/bin/wemux'
   alias mux='TERM=xterm-256color mux'
   alias xd='cd ~/public_html/tasutil; source root.sh; cd ProjectMetis/; source ./setup.sh; cd ..'
@@ -254,7 +341,11 @@ function jarvissetupalias() {
   alias sweepgitrepos='for dir in $(ls -d *); do echo ""; echo $dir; echo "=========================="; cd $dir; git status -uno 2>/dev/null | grep -E "modified|On\ branch"; cd ../; done'
   alias hpggsetup='source /cvmfs/oasis.opensciencegrid.org/osg-software/osg-wn-client/current/el7-x86_64/setup.sh; export X509_CERT_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates; export X509_VOMS_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/vomsdir; export VOMS_USERCONF=/cvmfs/cms.cern.ch/grid/etc/vomses;'
   alias hpggsetupel8='source /cvmfs/oasis.opensciencegrid.org/osg-software/osg-wn-client/current/el8-x86_64/setup.sh; export X509_CERT_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates; export X509_VOMS_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/vomsdir; export VOMS_USERCONF=/cvmfs/cms.cern.ch/grid/etc/vomses;'
+  # alias hpggsetupel9='source /cvmfs/oasis.opensciencegrid.org/osg-software/osg-wn-client/current/el9-x86_64/setup.sh; export X509_CERT_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates; export X509_VOMS_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/vomsdir; export VOMS_USERCONF=/cvmfs/cms.cern.ch/grid/etc/vomses;'
+  alias hpggsetupel9='source /cvmfs/oasis.opensciencegrid.org/osg-software/osg-wn-client/3.6/current/el9-x86_64/setup.sh; export X509_CERT_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates; export X509_VOMS_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/vomsdir; export VOMS_USERCONF=/cvmfs/cms.cern.ch/grid/etc/vomses;'
   alias gsetup='voms-proxy-init -hours 168 -voms cms -rfc'
+  alias gsetupgen='voms-proxy-init -hours 168 -voms cms -rfc --out ~/private/x509_proxy'
+  alias installgridcert='cd ~/.globus; rm -f usercert.pem; rm -f userkey.pem; openssl pkcs12 -in mycert.p12 -clcerts -nokeys -out usercert.pem; openssl pkcs12 -in mycert.p12 -nocerts -out userkey.pem; chmod 400 usercert.pem; chmod 400 userkey.pem'
   alias lep='cd /home/users/phchang/public_html/analysis/www/code/LepBabyMaker; source setup.sh'
   alias 3wl='cd /home/users/phchang/public_html/phys/LeptonBabyMaker; source root.sh'
   alias fake='cd /home/users/phchang/public_html/phys/FakeRate; source scripts/setup.sh'
@@ -318,12 +409,92 @@ function jarvissetupalias() {
   alias ctail='condor_tail -maxbytes 10000000 -stderr'
   alias ctailf='condor_tail -maxbytes 10000000 -f '
   alias stats='~/rooutil/syncfiles/pyfiles/stats.py'
-  alias pandoc_markdown='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html --number-sections'
-  alias pandoc_markdown_nonumber='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html'
-  alias addmargin="pdf-crop-margins -u -a4 0 0 -200 0"
-  alias tohpg='ssh -t hpg "ssh -t login12 \"module load tmux; tmux attach -d\""'
-  alias tolst='ssh -t hpg "ssh -t login12 \"module load tmux; tmux attach -d\""'
-  alias touaf='ssh -t uaf-2 "jv; tmux attach -d"'
+  # alias pandoc_markdown='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html --number-sections'
+  # alias pandoc_markdown_nonumber='/home/users/phchang/local/bin/pandoc -f markdown -t html -s -o index.html'
+  alias pandoc_markdown='/home/p.chang/software/bin/pandoc -f markdown -t html -s -o index.html --number-sections'
+  alias pandoc_markdown_nonumber='/home/p.chang/software/bin/pandoc -f markdown -t html -s -o index.html'
+  alias start="ssh login11 -t 'ml tmux; tmux attach -d'"
+  # Re-enable scrontab entries after scancel -u
+  alias scron-reset="scrontab -l | sed 's/^#DISABLED: //' | scrontab -"
+  # Cancel all my jobs and re-enable scrontab
+  alias scancel-all="scancel -u p.chang && scrontab -l | sed 's/^#DISABLED: //' | scrontab -"
+  # Monitor my SLURM job queue
+  alias squeue-monitor="monitor 'squeue -u p.chang'"
+  # Cancel running jobs older than N hours: scancel-old 24
+  function scancel-old() {
+      local hours=${1:?"Usage: scancel-old <hours>"}
+      local thresh=$((hours * 3600))
+      squeue -u p.chang -h -o "%i %M" -t RUNNING | while read -r jobid elapsed; do
+          local days=0 rest="$elapsed"
+          if [[ "$rest" == *-* ]]; then days="${rest%%-*}"; rest="${rest#*-}"; fi
+          IFS=: read -r -a p <<< "$rest"
+          local secs=0
+          if [[ ${#p[@]} -eq 3 ]]; then secs=$(( 10#${p[0]}*3600 + 10#${p[1]}*60 + 10#${p[2]} ))
+          else secs=$(( 10#${p[0]}*60 + 10#${p[1]} )); fi
+          secs=$(( secs + days*86400 ))
+          if (( secs > thresh )); then echo "Cancelling job $jobid (elapsed: $elapsed)"; scancel "$jobid"; fi
+      done
+  }
+  # Prioritize SLURM jobs round-robin across groups (by job name)
+  # 1st job of each group gets Nice=0, 2nd gets Nice=1, etc. capped at 500
+  function slurm_col {
+      local -A group_idx
+      local count=0
+      while read jobid name; do
+          local group="${name%__*}"  # strip __N suffix to get sample group
+          local idx=${group_idx[$group]:-0}
+          local n=$(( idx < 500 ? idx : 500 ))
+          scontrol update JobId="$jobid" Nice=$n
+          group_idx[$group]=$((idx+1))
+          count=$((count+1))
+      done < <(squeue -u $USER -h -o "%i %j" --sort=i -t PD)
+      echo "Updated $count pending jobs across ${#group_idx[@]} groups (round-robin Nice 0-500)"
+  }
+  # squeue with NAME last and full width
+  alias sq="squeue -u p.chang -o '%.10i %.9P %.2t %.10M %.6D %.20R %j'"
+  function sqlog {
+      scontrol show job $1 | grep -E "StdOut|StdErr"
+  }
+  function sqout {
+          vim "$(scontrol show job $1 | grep -oP 'StdOut=\K.*')"
+  }
+  function sqerr {
+          vim "$(scontrol show job $1 | grep -oP 'StdErr=\K.*')"
+  }
+  jobtail() {
+      local jobid=${1:-$(squeue -u $USER -h -t R -S -V | tail -1 | awk '{print $1}')}
+      if [[ -z "$jobid" ]]; then echo "No running jobs found"; return 1; fi
+      local info=$(scontrol show job "$jobid" 2>/dev/null)
+      local node=$(echo "$info" | grep -oP 'BatchHost=\K\S+')
+      local stdout=$(echo "$info" | grep -oP 'StdOut=\K\S+')
+      echo "Following job $jobid on $node:$stdout"
+      ssh "$node" "tail -f $stdout"
+  }
+  jobout() {
+      local jobid=${1:-$(squeue -u $USER -h -t R -S -V | tail -1 | awk '{print $1}')}
+      if [[ -z "$jobid" ]]; then echo "No running jobs found"; return 1; fi
+      local info=$(scontrol show job "$jobid" 2>/dev/null)
+      local node=$(echo "$info" | grep -oP 'BatchHost=\K\S+')
+      local stdout=$(echo "$info" | grep -oP 'StdOut=\K\S+')
+      local stderr=$(echo "$info" | grep -oP 'StdErr=\K\S+')
+      echo "Node: $node"
+      echo "StdOut: $stdout"
+      echo "StdErr: $stderr"
+      echo "--- stdout (tail) ---"
+      ssh "$node" "tail -30 $stdout 2>/dev/null"
+      echo "--- stderr (tail) ---"
+      ssh "$node" "tail -30 $stderr 2>/dev/null"
+  }
+}
+
+function install_certificate() {
+  cd ~/.globus
+  rm -f usercert.pem
+  rm -f userkey.pem
+  openssl pkcs12 -in mycert.p12 -clcerts -nokeys -out usercert.pem
+  openssl pkcs12 -in mycert.p12 -nocerts -out userkey.pem
+  chmod 400 userkey.pem
+  chmod 400 usercert.pem
 }
 
 function publish() {
@@ -341,8 +512,8 @@ function lh() {
     ls -lh -G /hadoop/cms/store/user/phchang/$1
 }
 
-#function jarvisloadcustomfunction() {
-#  #jarvisinfo "Loading all custom bash functions"
+#function loriloadcustomfunction() {
+#  #loriinfo "Loading all custom bash functions"
 #  # === custom functions === #
 #  source ~/login/${BASHFUNCTIONS}/framework.sh
 #  source ~/login/${BASHFUNCTIONS}/lxplus.sh
@@ -358,8 +529,8 @@ function lh() {
 #  source ~/login/${BASHFUNCTIONS}/niceplot.sh
 #}
 
-function jarvisbasheditorset() {
-  #jarvisinfo "Setting vi edtior mode for bash"
+function loribasheditorset() {
+  #loriinfo "Setting vi edtior mode for bash"
   # === editor === #
   VISUAL=vim; export VISUAL
   EDITOR=vim; export EDITOR
@@ -367,20 +538,20 @@ function jarvisbasheditorset() {
   bind '"jk":vi-movement-mode'
 }
 
-function jarvistimezone() {
-  #jarvisinfo "Stting time zone to America/Chicago"
+function loritimezone() {
+  #loriinfo "Stting time zone to America/Chicago"
   # export TZ="/usr/share/zoneinfo/America/Los_Angeles"
   export TZ="/usr/share/zoneinfo/America/New_York"
   #export TZ="/usr/share/zoneinfo/Europe/Paris"
 }
 
-#function jarvisreportsuccess() {
+#function lorireportsuccess() {
 #  info "Initiating module : "$USER"."
 #  info "All systems are ready."
 #  info ""
 #}
 
-function jarvisfileextensioncolor() {
+function lorifileextensioncolor() {
   export LS_COLORS="no=00"
   export LS_COLORS=$LS_COLORS:"*.py=00;34"
   export LS_COLORS=$LS_COLORS:"ow=100;34"
@@ -425,12 +596,12 @@ function jarvisfileextensioncolor() {
   export LS_COLORS=$LS_COLORS:"*.root=00;35"
 }
 
-function jarvissetupatlas() {
+function lorisetupatlas() {
   export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
   alias setupATLAS='source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh'
 }
 
-function jarvisphisetup() {
+function loriphisetup() {
   if [ $(hostname) == "*phiphi.t2.ucsd.edu*" ]; then
     . /opt/intel/bin/iccvars.sh intel64
     export PATH=$PATH:$HOME/.local/bin:$HOME/bin:/opt/intel/mic/bin
@@ -440,7 +611,7 @@ function jarvisphisetup() {
 }
 
 # Checking whether repository needs to push/pull or something else.
-function jarvisupdate() {
+function loriupdate() {
   if [ "${THISOS}" == "AWS" ]; then
     return
   fi
@@ -1206,22 +1377,22 @@ export -f jpegcap
 # === detecting systems === #
 bannercolor
 # bannerlite
-jarvisprelim
-jarvisdetectOS
-jarvisbinpath
-jarvissetupalias
-#jarvisloadcustomfunction
-jarvisbasheditorset
-jarvistimezone
-#jarvisreportsuccess
-jarvisfileextensioncolor
-jarvisphisetup
-#jarvissetupatlas
+loriprelim
+loridetectOS
+loribinpath
+lorisetupalias
+#loriloadcustomfunction
+loribasheditorset
+loritimezone
+#lorireportsuccess
+lorifileextensioncolor
+loriphisetup
+#lorisetupatlas
 
 # === login items === #
 
 #greeting
-# jarviscal
-# jarvisupdate
+# lorical
+# loriupdate
 
 #eof
