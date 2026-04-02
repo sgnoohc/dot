@@ -14,7 +14,7 @@ fi
 BASHFUNCTIONS="bash"
 
 #source ~/login/${BASHFUNCTIONS}/greeting.sh
-source ~/dot/history/history.sh
+# source ~/dot/history/history.sh
 
 HISTSIZE= 
 HISTFILESIZE=
@@ -31,7 +31,7 @@ function loriinfo() {
 
 function _lori_line() {
   local content="$1"
-  local w=$(printf '%s\n' "$content" | wc -L)
+  local w=${#content}
   local pad=$((76 - w))
   [[ $pad -lt 0 ]] && pad=0
   printf "│ %s%*s│\n" "$content" "$pad" ""
@@ -103,7 +103,7 @@ function bannercolor() {
   # $1=visible text (for width calc), $2=colored text (optional, defaults to $1)
   _bc_line() {
     local vis="$1" col="${2:-$1}"
-    local w=$(printf '%s\n' "$vis" | wc -L)
+    local w=${#vis}
     local pad=$((76 - w))
     [[ $pad -lt 0 ]] && pad=0
     printf "%s %s%*s%s\n" "${B}│${R}" "$col" "$pad" "" "${B}│${R}"
