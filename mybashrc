@@ -31,10 +31,7 @@ function loriinfo() {
 
 function _lori_line() {
   local content="$1"
-  local w=${#content}
-  local pad=$((76 - w))
-  [[ $pad -lt 0 ]] && pad=0
-  printf "│ %s%*s│\n" "$content" "$pad" ""
+  printf "│ %s\033[79G│\n" "$content"
 }
 
 function banner() {
@@ -99,14 +96,11 @@ function bannercolor() {
   fi
   [[ ${#qtext} -gt 70 ]] && qtext="${qtext:0:67}..."
 
-  # Helper: print a bordered line, padded to 77 visible inner chars
-  # $1=visible text (for width calc), $2=colored text (optional, defaults to $1)
+  # Helper: print a bordered line with right border at column 79
+  # $1=visible text (unused, kept for compat), $2=colored text (optional, defaults to $1)
   _bc_line() {
     local vis="$1" col="${2:-$1}"
-    local w=${#vis}
-    local pad=$((76 - w))
-    [[ $pad -lt 0 ]] && pad=0
-    printf "%s %s%*s%s\n" "${B}│${R}" "$col" "$pad" "" "${B}│${R}"
+    printf "%s %s\033[79G%s\n" "${B}│${R}" "$col" "${B}│${R}"
   }
 
   # ASCII art pieces (each 30 chars)
