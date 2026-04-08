@@ -992,6 +992,13 @@ function getlink {
 }
 export -f getlink
 
+function ood() {
+  local fullpath
+  fullpath="$(realpath "${1:-.}")"
+  echo "https://ondemand.rc.ufl.edu/pun/sys/files/api/v1/fs${fullpath}"
+}
+export -f ood
+
 function getlinkvvv {
     echo ${PWD/\/home\/users\/phchang\/public_html/http:\/\/vvv:vvv@uaf-10.t2.ucsd.edu\/~phchang/}/$1
 }
