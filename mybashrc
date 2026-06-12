@@ -93,7 +93,6 @@ function bannercolor() {
       "The good thing about science is that it's true whether or not you believe in it.|Neil deGrasse Tyson"
       "If I have seen further it is by standing on the shoulders of giants.|Isaac Newton"
       "We are just an advanced breed of monkeys on a minor planet of a very average star.|Stephen Hawking"
-      "Physics is like sex: sure, it may give some practical results, but that's not why we do it.|Richard Feynman"
       "Imagination is more important than knowledge.|Albert Einstein"
       "The universe is under no obligation to make sense to you.|Neil deGrasse Tyson"
       "In the middle of difficulty lies opportunity.|Albert Einstein"
@@ -426,6 +425,7 @@ function lorisetupalias() {
   alias scancel-all="scancel -u p.chang && scrontab -l | sed 's/^#DISABLED: //' | scrontab -"
   # Monitor my SLURM job queue
   alias squeue-monitor="monitor 'squeue -u p.chang'"
+  alias jclaude='ANTHROPIC_BASE_URL="http://desktop.coin-skate.ts.net:4000/" ANTHROPIC_API_KEY="sk-sYYpP7TqU8MOrXd7OOYc4Q" claude --model Gemma4'
   # Cancel running jobs older than N hours: scancel-old 24
   function scancel-old() {
       local hours=${1:?"Usage: scancel-old <hours>"}
@@ -1378,6 +1378,42 @@ jpegcap () {
   magick "$infile" -resize 2000x2000\> -define jpeg:extent=800KB "$outfile"
 }
 export -f jpegcap
+
+# Restart librarian: kick off run.sh immediately in the background (so the
+# dashboard refreshes now), scancel any pending librarian jobs, then strip
+# the #DISABLED: prefix from librarian entries and reinstall scrontab.
+# 2-char name so it's easy to type on phone over SSH.
+rl() {
+    mkdir -p "$HOME/scron/logs"
+    echo "rl: launching ~/librarian/run.sh in background -> ~/scron/logs/testlogs.txt"
+    nohup bash "$HOME/librarian/run.sh" >> "$HOME/scron/logs/testlogs.txt" 2>&1 </dev/null &
+    disown 2>/dev/null
+    local jobs
+    jobs=$(squeue --me --noheader --format="%i %o" 2>/dev/null | awk '/librarian/ {print $1}')
+    if [ -n "$jobs" ]; then
+        echo "rl: scancel $jobs"
+        scancel $jobs
+    fi
+    scrontab -l 2>/dev/null | awk '
+        function flush(u,   j, l) {
+            for (j = 1; j <= bn; j++) {
+                l = buf[j]
+                if (u) sub(/^#DISABLED: /, "", l)
+                print l
+            }
+            bn = 0
+        }
+        /^(#DISABLED: )?#SCRON/ { buf[++bn] = $0; next }
+        {
+            u = ($0 ~ /^#DISABLED:.*librarian/)
+            if (u) sub(/^#DISABLED: /, "")
+            flush(u)
+            print
+        }
+        END { flush(0) }
+    ' | scrontab -
+    echo "rl: scrontab re-enabled for librarian"
+}
 
 #------------------------------------------------------------------------
 #

@@ -43,6 +43,7 @@ NeoBundle 'tmhedberg/matchit'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'aminnj/vim-lazytools'
 NeoBundle 'google/vim-searchindex'
+NeoBundle 'rickhowe/diffchar.vim'
 " NeoBundle 'JuliaEditorSupport/julia-vim'
 " Required:
 call neobundle#end()
@@ -121,6 +122,7 @@ autocmd BufNewFile,BufRead *.def set syntax=cfg
 autocmd BufNewFile,BufRead *.cc_ set syntax=c
 autocmd BufNewFile,BufRead *.cu set syntax=c
 autocmd BufNewFile,BufRead *.cuh set syntax=c
+autocmd BufNewFile,BufRead *.que set syntax=tex
 autocmd BufNewFile,BufRead *.tex set wrap
 autocmd BufNewFile,BufRead *.md set virtualedit=all
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
@@ -133,7 +135,7 @@ vnoremap gw :s![^ ]\zs  \+! !g<CR>
 "set formatoptions=
 
 "set mouse=a                     "Set mouse active in iTerm (MacOSX?anyone?)
-" set autoindent
+"set autoindent
 "set smartindent
 "set cursorline                  "Current cursorline option
 "set textwidth=79                " break lines when line length increases
@@ -600,5 +602,10 @@ set cindent cino=j1,(0,ws,Ws
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 
-nmap <Leader>w :w<CR>:!make<CR><CR>:!open main.pdf<CR><CR>
+" Force comments to be dark gray
+augroup DarkComments
+  autocmd!
+  autocmd ColorScheme * highlight Comment ctermfg=240 guifg=#585858
+augroup END
+
 "eof

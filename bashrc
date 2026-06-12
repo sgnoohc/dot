@@ -37,9 +37,9 @@ esac
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 
-source /Users/phchang/miniconda3/etc/profile.d/conda.sh
-export SPACK_INSTALL_DIR=/Users/phchang/Software
-source ${SPACK_INSTALL_DIR}/spack/share/spack/setup-env.sh
+# source /Users/phchang/miniconda3/etc/profile.d/conda.sh
+# export SPACK_INSTALL_DIR=/Users/phchang/Software
+# source ${SPACK_INSTALL_DIR}/spack/share/spack/setup-env.sh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -64,10 +64,9 @@ export NVM_DIR="$HOME/.nvm"
 # opencode
 export PATH=/home/p.chang/.opencode/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 
-# Re-enable scrontab entries after scancel -u
-alias scron-reset="scrontab -l | sed 's/^#DISABLED: //' | scrontab -"
-# Cancel all my jobs and re-enable scrontab
-alias scancel-all="scancel -u p.chang && scrontab -l | sed 's/^#DISABLED: //' | scrontab -"
-# Monitor my SLURM job queue
-alias squeue-monitor="monitor 'squeue -u p.chang'"
+# lori — daily briefing on login
+# ~/bin/lori --short
+
+export PATH="/home/p.chang/.pixi/bin:$PATH"

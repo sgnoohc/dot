@@ -131,7 +131,7 @@ Host github-kbcgweb
 
 host github.com
   AddKeysToAgent yes
-  UseKeychain yes
+  # UseKeychain yes
   HostName github.com
   IdentityFile ~/.ssh/id_rsa
   User git
